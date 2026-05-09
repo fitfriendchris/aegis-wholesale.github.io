@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegis Capital | Deal Analyzer</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { font-family: 'Inter', sans-serif; background: #FFF8F0; }
+.navy { background-color: #1A3A5C; color: white; }
+.gold { color: #C9A227; }
+.gold-bg { background-color: #C9A227; }
+</style>
+</head>
+<body class="min-h-screen">
+<div class="navy py-6 px-4">
+<div class="max-w-4xl mx-auto flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center">⚡</div>
+<span class="text-xl font-bold">AEGIS CAPITAL | Deal Analyzer</span>
+</div>
+<a href="index.html" class="text-sm hover:underline">← Back to Site</a>
+</div>
+</div>
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+<!-- Property Info -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-2xl font-bold text-gray-800 mb-4">🏠 Property Info</h2>
+<div class="grid md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium mb-1">Address</label>
+<input id="address" type="text" class="w-full px-3 py-2 border rounded-lg" placeholder="123 Main St, Houston, TX 77001">
+</div>
+<div class="grid grid-cols-3 gap-2">
+<div>
+<label class="block text-sm font-medium mb-1">Beds</label>
+<input id="beds" type="number" class="w-full px-3 py-2 border rounded-lg" value="3">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Baths</label>
+<input id="baths" type="number" step="0.5" class="w-full px-3 py-2 border rounded-lg" value="2">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Sqft</label>
+<input id="sqft" type="number" class="w-full px-3 py-2 border rounded-lg" value="1450">
+</div>
+</div>
+</div>
+<div class="mt-4">
+<label class="block text-sm font-medium mb-1">Condition</label>
+<select id="condition" class="w-full px-3 py-2 border rounded-lg">
+<option value="excellent">C1 — Excellent (move-in ready)</option>
+<option value="good">C2 — Good (minor updates)</option>
+<option value="average">C3 — Average (some repairs)</option>
+<option value="fair">C4 — Fair (needs $15-30K)</option>
+<option value="poor">C5 — Poor (needs $30-60K)</option>
+<option value="distressed">C6 — Distressed (gut rehab)</option>
+</select>
+</div>
+</div>
+
+<!-- ARV Calculator -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-2xl font-bold text-gray-800 mb-4">📊 ARV Calculator</h2>
+<div class="grid md:grid-cols-3 gap-4 mb-4">
+<div>
+<label class="block text-sm font-medium mb-1">Comp 1 ($)</label>
+<input id="comp1" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="340000">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Comp 2 ($)</label>
+<input id="comp2" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="345000">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Comp 3 ($)</label>
+<input id="comp3" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="335000">
+</div>
+</div>
+<div class="bg-gray-50 rounded-lg p-4 flex justify-between items-center">
+<span class="font-semibold">Average ARV:</span>
+<span id="arv" class="text-2xl font-bold gold">$0</span>
+</div>
+</div>
+
+<!-- MAO Calculator -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-2xl font-bold text-gray-800 mb-4">💰 MAO Calculator (70% Rule)</h2>
+<div class="grid md:grid-cols-2 gap-4 mb-4">
+<div>
+<label class="block text-sm font-medium mb-1">Repair Estimate ($)</label>
+<input id="repairs" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="25000">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Rule %</label>
+<select id="rule" class="w-full px-3 py-2 border rounded-lg">
+<option value="0.7">70% (Standard)</option>
+<option value="0.65">65% (Conservative)</option>
+<option value="0.75">75% (Aggressive)</option>
+</select>
+</div>
+</div>
+<div class="bg-navy rounded-lg p-4 text-white">
+<div class="flex justify-between items-center mb-2">
+<span>ARV × Rule%:</span>
+<span id="arvRule">$0</span>
+</div>
+<div class="flex justify-between items-center mb-2">
+<span>− Repairs:</span>
+<span id="repairDeduction">$0</span>
+</div>
+<div class="flex justify-between items-center text-xl font-bold gold pt-2 border-t border-white/20">
+<span>MAO (Max Offer):</span>
+<span id="mao">$0</span>
+</div>
+</div>
+</div>
+
+<!-- Assignment Fee -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-2xl font-bold text-gray-800 mb-4">📈 Assignment Fee Calculator</h2>
+<div class="grid md:grid-cols-2 gap-4 mb-4">
+<div>
+<label class="block text-sm font-medium mb-1">Seller Asking Price ($)</label>
+<input id="asking" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="200000">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">End Buyer Price ($)</label>
+<input id="endBuyer" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="220000">
+</div>
+</div>
+<div class="bg-green-50 rounded-lg p-4 flex justify-between items-center">
+<span class="font-semibold">Assignment Fee:</span>
+<span id="assignmentFee" class="text-2xl font-bold text-green-600">$0</span>
+</div>
+</div>
+
+<!-- Save Deal -->
+<div class="text-center pb-8">
+<button onclick="saveDeal()" class="gold-bg text-navy px-8 py-4 rounded-lg font-bold text-lg hover:bg-yellow-400 transition">
+💾 Save Deal to Pipeline
+</button>
+<div id="saved" class="hidden mt-4 p-4 bg-green-100 rounded-lg text-green-700">
+✓ Deal saved! View pipeline below.
+</div>
+</div>
+
+<!-- Pipeline -->
+<div class="bg-white rounded-2xl shadow-lg p-6">
+<h2 class="text-2xl font-bold text-gray-800 mb-4">📋 Deal Pipeline</h2>
+<div id="pipeline" class="space-y-3">
+<p class="text-gray-500 text-center py-8">No deals yet. Use the calculator above and click Save.</p>
+</div>
+</div>
+</div>
+
+<script>
+// Auto-calculate on input
+['comp1','comp2','comp3','repairs','asking','endBuyer','rule'].forEach(id => {
+document.getElementById(id)?.addEventListener('input', calculate);
+});
+
+function calculate() {
+const c1 = parseFloat(document.getElementById('comp1').value) || 0;
+const c2 = parseFloat(document.getElementById('comp2').value) || 0;
+const c3 = parseFloat(document.getElementById('comp3').value) || 0;
+const repairs = parseFloat(document.getElementById('repairs').value) || 0;
+const rule = parseFloat(document.getElementById('rule').value) || 0.7;
+const asking = parseFloat(document.getElementById('asking').value) || 0;
+const endBuyer = parseFloat(document.getElementById('endBuyer').value) || 0;
+
+const comps = [c1, c2, c3].filter(c => c > 0);
+const arv = comps.length > 0 ? comps.reduce((a,b) => a+b, 0) / comps.length : 0;
+const arvRule = arv * rule;
+const mao = arvRule - repairs;
+const fee = endBuyer - asking;
+
+document.getElementById('arv').textContent = '$' + arv.toLocaleString();
+document.getElementById('arvRule').textContent = '$' + arvRule.toLocaleString();
+document.getElementById('repairDeduction').textContent = '$' + repairs.toLocaleString();
+document.getElementById('mao').textContent = '$' + mao.toLocaleString();
+document.getElementById('assignmentFee').textContent = '$' + fee.toLocaleString();
+
+return { arv, arvRule, repairs, mao, fee, address: document.getElementById('address').value };
+}
+
+function saveDeal() {
+const data = calculate();
+if (!data.address || data.arv === 0) {
+alert('Enter at least an address and one comp to save.');
+return;
+}
+
+const deal = {
+id: 'deal_' + Date.now(),
+...data,
+beds: document.getElementById('beds').value,
+baths: document.getElementById('baths').value,
+sqft: document.getElementById('sqft').value,
+condition: document.getElementById('condition').value,
+asking: document.getElementById('asking').value,
+endBuyer: document.getElementById('endBuyer').value,
+status: 'analyzing',
+date: new Date().toLocaleDateString()
+};
+
+const pipeline = JSON.parse(localStorage.getItem('aegis_pipeline') || '[]');
+pipeline.push(deal);
+localStorage.setItem('aegis_pipeline', JSON.stringify(pipeline));
+
+renderPipeline();
+document.getElementById('saved').classList.remove('hidden');
+setTimeout(() => document.getElementById('saved').classList.add('hidden'), 3000);
+}
+
+function renderPipeline() {
+const pipeline = JSON.parse(localStorage.getItem('aegis_pipeline') || '[]');
+const container = document.getElementById('pipeline');
+
+if (pipeline.length === 0) {
+container.innerHTML = '<p class="text-gray-500 text-center py-8">No deals yet. Use the calculator above and click Save.</p>';
+return;
+}
+
+container.innerHTML = pipeline.map(deal => `
+<div class="border rounded-lg p-4 flex justify-between items-center hover:bg-gray-50">
+<div>
+<div class="font-bold">${deal.address || 'No address'}</div>
+<div class="text-sm text-gray-600">ARV: $${deal.arv.toLocaleString()} | MAO: $${deal.mao.toLocaleString()} | Fee: $${deal.fee.toLocaleString()}</div>
+<div class="text-xs text-gray-400">${deal.beds}bd/${deal.baths}ba | ${deal.sqft}sqft | ${deal.condition} | ${deal.date}</div>
+</div>
+<span class="px-3 py-1 rounded-full text-sm font-bold ${
+deal.status === 'analyzing' ? 'bg-yellow-100 text-yellow-700' :
+deal.status === 'under_contract' ? 'bg-blue-100 text-blue-700' :
+'deal.status === 'closed' ? 'bg-green-100 text-green-700' :
+'bg-gray-100 text-gray-700'
+}">${deal.status}</span>
+</div>
+`).join('');
+}
+
+// Load existing pipeline on page load
+renderPipeline();
+</script>
+</body>
+</html>
