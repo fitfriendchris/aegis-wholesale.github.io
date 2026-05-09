@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegis Capital | Daily Deal Scanner</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { font-family: 'Inter', sans-serif; background: #FFF8F0; }
+.navy { background-color: #1A3A5C; color: white; }
+.gold { color: #C9A227; }
+.motivation-high { background: #fee2e2; color: #991b1b; }
+.motivation-med { background: #fef3c7; color: #92400e; }
+.motivation-low { background: #dbeafe; color: #1e40af; }
+</style>
+</head>
+<body class="min-h-screen">
+<div class="navy py-6 px-4">
+<div class="max-w-6xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center">📡</div>
+<span class="text-xl font-bold">AEGIS CAPITAL | Daily Deal Scanner</span>
+</div>
+<p class="text-gray-300 mt-2">Automated lead generation — runs every morning at 9 AM</p>
+</div>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 py-8">
+
+<!-- Auto-Scan Controls -->
+<div class="bg-white rounded-xl shadow p-6 mb-8">
+<h2 class="text-xl font-bold text-gray-800 mb-4">🤖 Automated Scan Controls</h2>
+<div class="grid md:grid-cols-3 gap-4">
+<button onclick="runScan('preforeclosure')" class="bg-red-600 text-white py-3 rounded-lg font-bold hover:bg-red-700">
+🔥 Scan Pre-Foreclosures
+</button>
+<button onclick="runScan('taxdelinquent')" class="bg-orange-600 text-white py-3 rounded-lg font-bold hover:bg-orange-700">
+💰 Scan Tax Delinquent
+</button>
+<button onclick="runScan('absentee')" class="bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700">
+✈️ Scan Absentee Owners
+</button>
+</div>
+<div class="mt-4 p-3 bg-gray-50 rounded-lg">
+<div class="flex justify-between text-sm">
+<span>Last scan: <span id="lastScan">Never</span></span>
+<span>Leads found today: <span id="todayLeads">0</span></span>
+</div>
+</div>
+</div>
+
+<!-- Today's Leads -->
+<div class="bg-white rounded-xl shadow p-6 mb-8">
+<h2 class="text-xl font-bold text-gray-800 mb-4">📋 Today's Hot Leads</h2>
+<div id="leadsContainer">
+<p class="text-gray-500 text-center py-8">Run a scan to find motivated sellers</p>
+</div>
+</div>
+
+<!-- Scripts Reference -->
+<div class="bg-white rounded-xl shadow p-6">
+<h2 class="text-xl font-bold text-gray-800 mb-4">💬 One-Click Scripts</h2>
+<div class="grid md:grid-cols-2 gap-4">
+<div class="p-4 bg-gray-50 rounded-lg">
+<div class="font-bold text-navy mb-2">Pre-Foreclosure Script</div>
+<div class="text-sm text-gray-600 mb-3">"Hi [Name], this is [Your Name] with Aegis Capital. I noticed your property at [Address] is scheduled for foreclosure auction on [Date]. I buy houses fast for cash — no repairs, no realtor fees, close in 7 days. Can I make you an offer before the auction?"</div>
+<button onclick="copyScript(this)" class="text-blue-600 text-sm hover:underline">📋 Copy</button>
+</div>
+<div class="p-4 bg-gray-50 rounded-lg">
+<div class="font-bold text-navy mb-2">Tax Delinquent Script</div>
+<div class="text-sm text-gray-600 mb-3">"Hi [Name], I'm calling about your property at [Address]. I saw there are outstanding property taxes of $[Amount]. I can buy your house quickly for cash and resolve the tax issue. Would you be open to a no-obligation offer?"</div>
+<button onclick="copyScript(this)" class="text-blue-600 text-sm hover:underline">📋 Copy</button>
+</div>
+<div class="p-4 bg-gray-50 rounded-lg">
+<div class="font-bold text-navy mb-2">Absentee Owner Script</div>
+<div class="text-sm text-gray-600 mb-3">"Hi [Name], I see you own the rental property at [Address]. Are you still actively renting it out, or have you thought about selling? I'm a cash buyer and can close quickly with no repairs needed."</div>
+<button onclick="copyScript(this)" class="text-blue-600 text-sm hover:underline">📋 Copy</button>
+</div>
+<div class="p-4 bg-gray-50 rounded-lg">
+<div class="font-bold text-navy mb-2">Out-of-Date Listing Script</div>
+<div class="text-sm text-gray-600 mb-3">"Hi [Name], I noticed your house at [Address] has been on the market for [X] days with several price reductions. I'm a cash investor — no financing contingencies, no inspections, close in 7 days. Want to discuss a cash offer?"</div>
+<button onclick="copyScript(this)" class="text-blue-600 text-sm hover:underline">📋 Copy</button>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+// Simulated scan — in production, this would hit APIs
+const SOURCES = {
+preforeclosure: [
+{ address: "4521 Oak Ridge Dr, Houston, TX 77021", motivation: "high", type: "Pre-foreclosure", note: "Notice of default filed. Auction scheduled 45 days.", price: "$145K", arv: "$220K" },
+{ address: "8912 Pine Forest Ln, Dallas, TX 75217", motivation: "high", type: "Pre-foreclosure", note: "3 months behind. Bank filed foreclosure.", price: "$89K", arv: "$155K" },
+{ address: "2234 Cedar Brook Rd, Austin, TX 78744", motivation: "high", type: "Pre-foreclosure", note: "Divorce + foreclosure. Motivated.", price: "$195K", arv: "$310K" }
+],
+taxdelinquent: [
+{ address: "1105 Magnolia Ave, San Antonio, TX 78206", motivation: "high", type: "Tax Delinquent", note: "3 years delinquent. $12K owed. County auction in 60 days.", price: "$75K", arv: "$140K" },
+{ address: "6742 Elm Street, Fort Worth, TX 76104", motivation: "med", type: "Tax Delinquent", note: "2 years delinquent. $8K owed.", price: "$110K", arv: "$185K" }
+],
+absentee: [
+{ address: "3301 River Oaks Blvd, Houston, TX 77019", motivation: "med", type: "Absentee Owner", note: "Owner in California. Tired landlord. Long-term tenant.", price: "$320K", arv: "$450K" },
+{ address: "5550 Legacy Dr, Plano, TX 75024", motivation: "low", type: "Absentee Owner", note: "Owner in New York. Inherited property.", price: "$275K", arv: "$380K" }
+]
+};
+
+function runScan(type) {
+const leads = SOURCES[type] || [];
+const container = document.getElementById('leadsContainer');
+const existing = JSON.parse(localStorage.getItem('aegis_leads') || '[]');
+
+let html = '<div class="overflow-x-auto"><table class="w-full text-left">';
+html += '<thead class="bg-gray-50"><tr><th class="p-3">Property</th><th class="p-3">Type</th><th class="p-3">Motivation</th><th class="p-3">Price / ARV</th><th class="p-3">Note</th><th class="p-3">Action</th></tr></thead><tbody>';
+
+leads.forEach((lead, idx) => {
+const motivationClass = lead.motivation === 'high' ? 'motivation-high' : lead.motivation === 'med' ? 'motivation-med' : 'motivation-low';
+html += `<tr class="border-b">
+<td class="p-3 font-medium">${lead.address}</td>
+<td class="p-3">${lead.type}</td>
+<td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${motivationClass}">${lead.motivation.toUpperCase()}</span></td>
+<td class="p-3">${lead.price} / ${lead.arv}</td>
+<td class="p-3 text-sm text-gray-600">${lead.note}</td>
+<td class="p-3"><button onclick="saveLead('${lead.type}', '${lead.address}', '${lead.motivation}', '${lead.price}', '${lead.arv}')" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">Save</button></td>
+</tr>`;
+});
+
+html += '</tbody></table></div>';
+container.innerHTML = html;
+
+// Update stats
+document.getElementById('lastScan').textContent = new Date().toLocaleString();
+document.getElementById('todayLeads').textContent = leads.length;
+
+// Save to CRM
+leads.forEach(lead => {
+existing.push({
+...lead,
+date: new Date().toISOString(),
+status: 'new',
+source: type
+});
+});
+localStorage.setItem('aegis_leads', JSON.stringify(existing));
+}
+
+function saveLead(type, address, motivation, price, arv) {
+const leads = JSON.parse(localStorage.getItem('aegis_leads') || '[]');
+leads.push({
+type, address, motivation, price, arv,
+date: new Date().toISOString(),
+status: 'new',
+source: 'manual'
+});
+localStorage.setItem('aegis_leads', JSON.stringify(leads));
+alert('Lead saved to CRM!');
+}
+
+function copyScript(btn) {
+const text = btn.previousElementSibling.textContent;
+navigator.clipboard.writeText(text).then(() => {
+btn.textContent = '✅ Copied!';
+setTimeout(() => btn.textContent = '📋 Copy', 2000);
+});
+}
+
+// Auto-scan on load if it's morning
+const hour = new Date().getHours();
+if (hour >= 8 && hour <= 10) {
+document.getElementById('leadsContainer').innerHTML = '<p class="text-blue-600 text-center py-8">☀️ Morning scan ready. Click a button above to run.</p>';
+}
+</script>
+</body>
+</html>
