@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegis Capital | Deal Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { font-family: 'Inter', sans-serif; background: #FFF8F0; }
+.navy { background-color: #1A3A5C; color: white; }
+.gold { color: #C9A227; }
+</style>
+</head>
+<body class="min-h-screen">
+<div class="navy py-6 px-4">
+<div class="max-w-6xl mx-auto flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center">📊</div>
+<span class="text-xl font-bold">AEGIS CAPITAL | Deal Dashboard</span>
+</div>
+<div class="text-sm">Auto-updated: <span id="lastUpdate">Now</span></div>
+</div>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 py-8">
+<!-- Stats Cards -->
+<div class="grid md:grid-cols-4 gap-4 mb-8">
+<div class="bg-white rounded-xl shadow p-4">
+<div class="text-sm text-gray-500">Active Deals</div>
+<div class="text-3xl font-bold text-navy" id="activeDeals">0</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4">
+<div class="text-sm text-gray-500">This Month Profit</div>
+<div class="text-3xl font-bold gold" id="monthProfit">$0</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4">
+<div class="text-sm text-gray-500">Leads This Week</div>
+<div class="text-3xl font-bold text-navy" id="weekLeads">0</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4">
+<div class="text-sm text-gray-500">Buyer Database</div>
+<div class="text-3xl font-bold text-green-600" id="buyerCount">0</div>
+</div>
+</div>
+
+<!-- Deals Table -->
+<div class="bg-white rounded-xl shadow p-6 mb-8">
+<h2 class="text-xl font-bold text-gray-800 mb-4">📋 Active Deals</h2>
+<table class="w-full text-left">
+<thead class="bg-gray-50">
+<tr>
+<th class="p-3">Property</th>
+<th class="p-3">State</th>
+<th class="p-3">Status</th>
+<th class="p-3">Assignment Fee</th>
+<th class="p-3">Actions</th>
+</tr>
+</thead>
+<tbody id="dealsTable">
+<tr><td colspan="5" class="p-4 text-gray-500 text-center">No deals yet. Use the Deal Analyzer to add.</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- Quick Actions -->
+<div class="grid md:grid-cols-3 gap-4">
+<a href="deal-analyzer.html" class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
+<div class="text-3xl mb-2">🔍</div>
+<div class="font-bold text-navy">Deal Analyzer</div>
+<div class="text-sm text-gray-500">ARV, MAO, Pipeline</div>
+</a>
+<a href="contract-generator.html" class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
+<div class="text-3xl mb-2">⚖️</div>
+<div class="font-bold text-navy">Contract Generator</div>
+<div class="text-sm text-gray-500">Create & E-sign</div>
+</a>
+<a href="email-templates.html" class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
+<div class="text-3xl mb-2">✉️</div>
+<div class="font-bold text-navy">Email Templates</div>
+<div class="text-sm text-gray-500">Copy-paste outreach</div>
+</a>
+</div>
+</div>
+
+<script>
+// Load from localStorage
+function loadDashboard() {
+const pipeline = JSON.parse(localStorage.getItem('aegis_pipeline') || '[]');
+const leads = JSON.parse(localStorage.getItem('aegis_leads') || '[]');
+const buyers = JSON.parse(localStorage.getItem('aegis_buyers') || '[]');
+
+const active = pipeline.filter(d => d.status !== 'closed' && d.status !== 'dead');
+const closed = pipeline.filter(d => d.status === 'closed');
+const profit = closed.reduce((a,b) => a + (b.fee || 0), 0);
+
+// Update stats
+document.getElementById('activeDeals').textContent = active.length;
+document.getElementById('monthProfit').textContent = '$' + profit.toLocaleString();
+document.getElementById('weekLeads').textContent = leads.length;
+document.getElementById('buyerCount').textContent = buyers.length;
+
+// Update deals table
+const tbody = document.getElementById('dealsTable');
+if (active.length > 0) {
+tbody.innerHTML = active.map(deal => `
+<tr class="border-b">
+<td class="p-3">${deal.address || 'Unknown'}</td>
+<td class="p-3">${deal.state || 'TX'}</td>
+<td class="p-3"><span class="px-2 py-1 rounded-full text-xs ${
+deal.status === 'under_contract' ? 'bg-blue-100 text-blue-700' :
+'deal.status === 'analyzing' ? 'bg-yellow-100 text-yellow-700' :
+'bg-green-100 text-green-700'
+}">${deal.status}</span></td>
+<td class="p-3 font-bold gold">$${(deal.fee || 0).toLocaleString()}</td>
+<td class="p-3"><a href="contract-generator.html" class="text-blue-600 hover:underline">Contract →</a></td>
+</tr>
+`).join('');
+}
+}
+
+loadDashboard();
+</script>
+</body>
+</html>
