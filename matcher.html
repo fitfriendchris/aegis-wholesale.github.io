@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegis Capital | Auto-Matching Engine</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { font-family: 'Inter', sans-serif; background: #FFF8F0; }
+.navy { background-color: #1A3A5C; color: white; }
+.gold { color: #C9A227; }
+.match-card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 16px; border-left: 4px solid #10B981; }
+.no-match { border-left-color: #EF4444; }
+.partial-match { border-left-color: #F59E0B; }
+</style>
+</head>
+<body class="min-h-screen">
+<div class="navy py-6 px-4">
+<div class="max-w-6xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center">🔗</div>
+<span class="text-xl font-bold">AEGIS CAPITAL | Auto-Matching Engine</span>
+</div>
+<p class="text-gray-300 mt-2">Upload your deal — we'll find every buyer who wants it</p>
+</div>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 py-8">
+
+<!-- Deal Input -->
+<div class="bg-white rounded-xl shadow p-6 mb-8">
+<h2 class="text-xl font-bold text-navy mb-4">🏠 Enter Deal Details</h2>
+<div class="grid md:grid-cols-3 gap-4">
+<div>
+<label class="block text-sm font-medium mb-1">Property Address</label>
+<input id="dealAddress" type="text" class="w-full px-3 py-2 border rounded-lg" placeholder="123 Main St, Houston, TX 77001">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Price (Your Contract)</label>
+<input id="dealPrice" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="145000">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">ARV</label>
+<input id="dealARV" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="220000">
+</div>
+</div>
+<div class="grid md:grid-cols-4 gap-4 mt-4">
+<div>
+<label class="block text-sm font-medium mb-1">State</label>
+<select id="dealState" class="w-full px-3 py-2 border rounded-lg">
+<option value="TX">Texas</option>
+<option value="FL">Florida</option>
+<option value="GA">Georgia</option>
+<option value="AZ">Arizona</option>
+<option value="CO">Colorado</option>
+<option value="IN">Indiana</option>
+<option value="OH">Ohio</option>
+<option value="MO">Missouri</option>
+<option value="TN">Tennessee</option>
+<option value="AL">Alabama</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">City</label>
+<input id="dealCity" type="text" class="w-full px-3 py-2 border rounded-lg" placeholder="Houston">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Bedrooms</label>
+<input id="dealBeds" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="4">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Bathrooms</label>
+<input id="dealBaths" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="2.5" step="0.5">
+</div>
+</div>
+<div class="grid md:grid-cols-4 gap-4 mt-4">
+<div>
+<label class="block text-sm font-medium mb-1">Sqft</label>
+<input id="dealSqft" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="2340">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Year Built</label>
+<input id="dealYear" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="1978">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Property Type</label>
+<select id="dealType" class="w-full px-3 py-2 border rounded-lg">
+<option value="sfr">Single Family</option>
+<option value="multi">Multi-Family</option>
+<option value="condo">Condo/Townhome</option>
+<option value="land">Land</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Repair Estimate</label>
+<input id="dealRepairs" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="42000">
+</div>
+</div>
+<div class="mt-4">
+<label class="block text-sm font-medium mb-1">Condition / Notes</label>
+<textarea id="dealNotes" rows="2" class="w-full px-3 py-2 border rounded-lg" placeholder="C+ condition, needs kitchen and bath rehab"></textarea>
+</div>
+<button onclick="findMatches()" class="mt-4 w-full navy py-3 rounded-lg font-bold text-lg">🔍 FIND MATCHING BUYERS</button>
+</div>
+
+<!-- Results -->
+<div id="matchResults" class="hidden">
+<h2 class="text-xl font-bold text-navy mb-4">✅ Matching Buyers</h2>
+<div id="matchesList"></div>
+</div>
+
+<!-- No Matches -->
+<div id="noMatches" class="hidden bg-white rounded-xl shadow p-6 text-center">
+<div class="text-4xl mb-2">⚠️</div>
+<h3 class="text-lg font-bold text-navy mb-2">No Exact Matches Found</h3>
+<p class="text-gray-600 mb-4">This deal doesn't fit current buyer buy-boxes. Options:</p>
+<div class="grid md:grid-cols-3 gap-4">
+<div class="bg-gray-50 p-4 rounded-lg">
+<div class="font-bold mb-1">Option 1</div>
+<div class="text-sm">Expand to new states/cities</div>
+</div>
+<div class="bg-gray-50 p-4 rounded-lg">
+<div class="font-bold mb-1">Option 2</div>
+<div class="text-sm">Add buyer who wants this type</div>
+</div>
+<div class="bg-gray-50 p-4 rounded-lg">
+<div class="font-bold mb-1">Option 3</div>
+<div class="text-sm">Lower price to match buy-box</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+// Buyer database with detailed buy-boxes
+const BUYERS = [
+{
+  name: "Houston Home Buyers LLC",
+  states: ["TX"],
+  cities: ["Houston", "Katy", "Sugar Land", "Pearland", "Cypress", "Spring", "Humble", "Pasadena", "Baytown"],
+  minPrice: 50000,
+  maxPrice: 250000,
+  types: ["sfr", "townhome"],
+  minSqft: 1000,
+  maxSqft: 3500,
+  minBeds: 3,
+  maxBeds: 5,
+  minBaths: 2,
+  minYear: 1970,
+  condition: "Any",
+  wontBuy: ["condo", "foundation", "pre-1950"],
+  volume: "5-8/month",
+  fee: "$15K-25K",
+  phone: "(713) 555-0200",
+  email: "deals@houstonhomebuyers.com",
+  closeTime: "7-14 days",
+  active: 12
+},
+{
+  name: "TX Cash Investors",
+  states: ["TX", "OK"],
+  cities: ["Dallas", "Fort Worth", "Arlington", "Plano", "Frisco", "Irving", "Garland", "Mesquite", "Richardson", "Carrollton"],
+  minPrice: 100000,
+  maxPrice: 500000,
+  types: ["sfr", "multi"],
+  minSqft: 1200,
+  maxSqft: 5000,
+  minBeds: 3,
+  maxBeds: 6,
+  minBaths: 2,
+  minYear: 1960,
+  condition: "Any",
+  wontBuy: ["rural", "litigation", "environmental"],
+  volume: "3-5/month",
+  fee: "$20K-40K",
+  phone: "(832) 555-0300",
+  email: "acquisitions@txcash.com",
+  closeTime: "10-21 days",
+  active: 8
+},
+{
+  name: "Sunshine Capital Group",
+  states: ["FL", "GA", "SC"],
+  cities: ["Tampa", "Orlando", "Miami", "Jacksonville", "Atlanta", "Savannah", "Charlotte", "Columbia"],
+  minPrice: 75000,
+  maxPrice: 400000,
+  types: ["sfr", "condo", "townhome"],
+  minSqft: 800,
+  maxSqft: 4000,
+  minBeds: 2,
+  maxBeds: 5,
+  minBaths: 1.5,
+  minYear: 1980,
+  condition: "Light rehab",
+  wontBuy: ["heavy-rehab", "pre-1970", "flood"],
+  volume: "8-12/month",
+  fee: "$15K-30K",
+  phone: "(813) 555-0450",
+  email: "buy@sunshinecapital.com",
+  closeTime: "48 hours",
+  active: 15
+},
+{
+  name: "Rocky Mountain Properties",
+  states: ["CO", "AZ"],
+  cities: ["Denver", "Colorado Springs", "Aurora", "Phoenix", "Tucson", "Mesa", "Scottsdale"],
+  minPrice: 100000,
+  maxPrice: 600000,
+  types: ["sfr", "condo", "townhome"],
+  minSqft: 900,
+  maxSqft: 4500,
+  minBeds: 2,
+  maxBeds: 6,
+  minBaths: 2,
+  minYear: 1975,
+  condition: "Any",
+  wontBuy: ["hoa-restrictions", "short-term-rental-ban"],
+  volume: "4-6/month",
+  fee: "$25K-50K",
+  phone: "(303) 555-0600",
+  email: "acquire@rockymountainprops.com",
+  closeTime: "14 days",
+  active: 10
+},
+{
+  name: "Midwest Cash Buyers",
+  states: ["IN", "OH", "MO"],
+  cities: ["Indianapolis", "Columbus", "Cincinnati", "Cleveland", "Kansas City", "St Louis", "Dayton", "Toledo"],
+  minPrice: 40000,
+  maxPrice: 200000,
+  types: ["sfr", "multi"],
+  minSqft: 800,
+  maxSqft: 4000,
+  minBeds: 2,
+  maxBeds: 5,
+  minBaths: 1,
+  minYear: 1950,
+  condition: "Any",
+  wontBuy: ["extensive-mold", "unresolved-liens"],
+  volume: "6-10/month",
+  fee: "$10K-20K",
+  phone: "(317) 555-0700",
+  email: "deals@midwestcash.com",
+  closeTime: "7-10 days",
+  active: 18
+},
+{
+  name: "Southern REI Group",
+  states: ["TN", "AL", "GA"],
+  cities: ["Nashville", "Memphis", "Birmingham", "Huntsville", "Chattanooga", "Atlanta", "Augusta"],
+  minPrice: 50000,
+  maxPrice: 350000,
+  types: ["sfr", "multi", "land"],
+  minSqft: 1000,
+  maxSqft: 5000,
+  minBeds: 3,
+  maxBeds: 6,
+  minBaths: 2,
+  minYear: 1965,
+  condition: "Any",
+  wontBuy: ["sinkhole", "flood-zone"],
+  volume: "5-9/month",
+  fee: "$15K-35K",
+  phone: "(615) 555-0800",
+  email: "buy@southernrei.com",
+  closeTime: "10-14 days",
+  active: 14
+}
+];
+
+function findMatches() {
+const deal = {
+  price: parseInt(document.getElementById('dealPrice').value) || 0,
+  arv: parseInt(document.getElementById('dealARV').value) || 0,
+  state: document.getElementById('dealState').value,
+  city: document.getElementById('dealCity').value.toLowerCase(),
+  beds: parseInt(document.getElementById('dealBeds').value) || 0,
+  baths: parseFloat(document.getElementById('dealBaths').value) || 0,
+  sqft: parseInt(document.getElementById('dealSqft').value) || 0,
+  year: parseInt(document.getElementById('dealYear').value) || 0,
+  type: document.getElementById('dealType').value,
+  repairs: parseInt(document.getElementById('dealRepairs').value) || 0,
+  address: document.getElementById('dealAddress').value
+};
+
+if (!deal.price || !deal.state) {
+  alert('Enter at least price and state');
+  return;
+}
+
+// Calculate fee
+deal.fee = deal.arv - deal.price - deal.repairs;
+
+const matches = [];
+
+BUYERS.forEach(buyer => {
+  let score = 0;
+  let reasons = [];
+  let flags = [];
+
+  // State match (25 points)
+  if (buyer.states.includes(deal.state)) {
+    score += 25;
+    reasons.push('✅ State match');
+  } else {
+    flags.push('❌ Wrong state');
+    return; // Hard stop
+  }
+
+  // City match (20 points)
+  const cityMatch = buyer.cities.some(c => deal.city.includes(c.toLowerCase()));
+  if (cityMatch) {
+    score += 20;
+    reasons.push('✅ City match');
+  } else {
+    flags.push('⚠️ City not in buy-box');
+  }
+
+  // Price match (20 points)
+  if (deal.price >= buyer.minPrice && deal.price <= buyer.maxPrice) {
+    score += 20;
+    reasons.push('✅ Price in range');
+  } else if (deal.price < buyer.minPrice) {
+    flags.push('⚠️ Below minimum price');
+  } else {
+    flags.push('❌ Above maximum price');
+    score -= 10;
+  }
+
+  // Type match (10 points)
+  if (buyer.types.includes(deal.type)) {
+    score += 10;
+    reasons.push('✅ Property type match');
+  } else {
+    flags.push('❌ Wrong property type');
+    score -= 5;
+  }
+
+  // Sqft match (10 points)
+  if (deal.sqft >= buyer.minSqft && deal.sqft <= buyer.maxSqft) {
+    score += 10;
+    reasons.push('✅ Sqft in range');
+  } else {
+    flags.push('⚠️ Sqft outside range');
+  }
+
+  // Beds match (5 points)
+  if (deal.beds >= buyer.minBeds && deal.beds <= buyer.maxBeds) {
+    score += 5;
+    reasons.push('✅ Bedroom count match');
+  } else {
+    flags.push('⚠️ Bedroom count off');
+  }
+
+  // Year match (5 points)
+  if (deal.year >= buyer.minYear) {
+    score += 5;
+    reasons.push('✅ Year built acceptable');
+  } else {
+    flags.push('⚠️ Too old');
+    score -= 5;
+  }
+
+  // Baths match (5 points)
+  if (deal.baths >= buyer.minBaths) {
+    score += 5;
+    reasons.push('✅ Bathrooms adequate');
+  }
+
+  // Calculate assignment fee
+  const assignmentFee = deal.price * 0.15; // Conservative 15%
+
+  matches.push({
+    buyer,
+    score: Math.max(0, score),
+    reasons,
+    flags,
+    assignmentFee,
+    match: score >= 60 ? 'EXCELLENT' : score >= 40 ? 'GOOD' : score >= 20 ? 'POSSIBLE' : 'WEAK'
+  });
+});
+
+// Sort by score
+matches.sort((a, b) => b.score - a.score);
+
+// Display
+const resultsDiv = document.getElementById('matchResults');
+const noMatchesDiv = document.getElementById('noMatches');
+const listDiv = document.getElementById('matchesList');
+
+if (matches.length === 0 || matches[0].score < 20) {
+  resultsDiv.classList.add('hidden');
+  noMatchesDiv.classList.remove('hidden');
+} else {
+  resultsDiv.classList.remove('hidden');
+  noMatchesDiv.classList.add('hidden');
+
+  let html = `<div class="bg-white rounded-xl shadow p-4 mb-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <div class="font-bold text-navy">${deal.address || 'Your Deal'}</div>
+        <div class="text-sm text-gray-500">${deal.city}, ${deal.state.toUpperCase()} | $${deal.price.toLocaleString()} | ${deal.beds}BR/${deal.baths}BA | ${deal.sqft} sqft</div>
+      </div>
+      <div class="text-right">
+        <div class="text-sm text-gray-500">Est. Assignment Fee</div>
+        <div class="text-2xl font-bold gold">$${(deal.arv - deal.price - deal.repairs).toLocaleString()}</div>
+      </div>
+    </div>
+  </div>`;
+
+  matches.filter(m => m.score >= 20).forEach((match, i) => {
+    const badgeColor = match.match === 'EXCELLENT' ? 'bg-green-100 text-green-700' : 
+                      match.match === 'GOOD' ? 'bg-blue-100 text-blue-700' : 
+                      'bg-yellow-100 text-yellow-700';
+    
+    html += `
+    <div class="match-card shadow ${match.score < 40 ? 'partial-match' : ''}">
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <h3 class="text-lg font-bold text-navy">${match.buyer.name}</h3>
+          <div class="text-sm text-gray-500">${match.buyer.market} | ${match.buyer.closeTime} close</div>
+        </div>
+        <div class="text-right">
+          <span class="px-3 py-1 rounded-full text-xs font-bold ${badgeColor}">${match.match} MATCH</span>
+          <div class="text-sm text-gray-500 mt-1">Score: ${match.score}/100</div>
+        </div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-4 mb-3">
+        <div>
+          <div class="text-sm font-bold text-navy mb-1">Why This Matches:</div>
+          ${match.reasons.map(r => `<div class="text-sm text-green-700">${r}</div>`).join('')}
+        </div>
+        <div>
+          <div class="text-sm font-bold text-navy mb-1">Watch Out For:</div>
+          ${match.flags.length > 0 ? match.flags.map(f => `<div class="text-sm text-orange-600">${f}</div>`).join('') : '<div class="text-sm text-gray-500">No flags!</div>'}
+        </div>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-2 mt-3">
+        <div class="bg-gray-50 p-2 rounded text-center">
+          <div class="font-bold">Their Buy Box</div>
+          <div class="text-sm">$${match.buyer.minPrice.toLocaleString()} - $${match.buyer.maxPrice.toLocaleString()}</div>
+        </div>
+        <div class="bg-gray-50 p-2 rounded text-center">
+          <div class="font-bold">Typical Fee</div>
+          <div class="text-sm">${match.buyer.fee}</div>
+        </div>
+        <div class="bg-gray-50 p-2 rounded text-center">
+          <div class="font-bold">Contact</div>
+          <div class="text-sm">${match.buyer.phone}</div>
+        </div>
+      </div>
+      
+      <div class="mt-3 flex gap-2">
+        <button onclick="contactBuyer('${match.buyer.phone}', '${match.buyer.email}', '${match.buyer.name}')" class="flex-1 bg-green-600 text-white py-2 rounded-lg font-bold">
+          📞 Contact Buyer
+        </button>
+        <button onclick="sendDeal('${match.buyer.email}')" class="flex-1 bg-blue-600 text-white py-2 rounded-lg font-bold">
+          📧 Send Deal
+        </button>
+      </div>
+    </div>`;
+  });
+
+  listDiv.innerHTML = html;
+}
+}
+
+function contactBuyer(phone, email, name) {
+const script = `Hi ${name.split(' ')[0]}, I have a deal that fits your buy-box. ${document.getElementById('dealAddress').value}. Price: $${document.getElementById('dealPrice').value}. ARV: $${document.getElementById('dealARV').value}. Are you interested?`;
+
+if (confirm(`Call ${name} at ${phone}?\n\nSample script:\n${script}`)) {
+  window.location.href = `tel:${phone.replace(/\D/g, '')}`;
+}
+}
+
+function sendDeal(email) {
+const deal = {
+  address: document.getElementById('dealAddress').value,
+  price: document.getElementById('dealPrice').value,
+  arv: document.getElementById('dealARV').value,
+  state: document.getElementById('dealState').value,
+  city: document.getElementById('dealCity').value,
+  beds: document.getElementById('dealBeds').value,
+  baths: document.getElementById('dealBaths').value,
+  sqft: document.getElementById('dealSqft').value,
+  year: document.getElementById('dealYear').value,
+  type: document.getElementById('dealType').value,
+  repairs: document.getElementById('dealRepairs').value
+};
+
+const body = `NEW DEAL - ${deal.address}
+
+Property Details:
+- Price: $${parseInt(deal.price).toLocaleString()}
+- ARV: $${parseInt(deal.arv).toLocaleString()}
+- Location: ${deal.city}, ${deal.state.toUpperCase()}
+- Specs: ${deal.beds}BR/${deal.baths}BA, ${deal.sqft} sqft, Built ${deal.year}
+- Repairs: $${parseInt(deal.repairs).toLocaleString()}
+- Est. Assignment Fee: $${(parseInt(deal.arv) - parseInt(deal.price) - parseInt(deal.repairs)).toLocaleString()}
+
+Let me know if you want to see it.`;
+
+window.location.href = `mailto:${email}?subject=Deal: ${deal.address}&body=${encodeURIComponent(body)}`;
+}
+
+// Load buyers from localStorage if available
+const saved = localStorage.getItem('aegis_buyers');
+if (saved) {
+const custom = JSON.parse(saved);
+// Merge with defaults
+}
+</script>
+</body>
+</html>

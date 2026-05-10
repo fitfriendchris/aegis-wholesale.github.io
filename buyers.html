@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegis Capital | Buyer Database & Matching</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { font-family: 'Inter', sans-serif; background: #FFF8F0; }
+.navy { background-color: #1A3A5C; color: white; }
+.gold { color: #C9A227; }
+.buyer-card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+.match-badge { background: #10B981; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+.buy-box { background: #F3F4F6; padding: 12px; border-radius: 8px; margin-top: 8px; }
+</style>
+</head>
+<body class="min-h-screen">
+<div class="navy py-6 px-4">
+<div class="max-w-6xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center">👥</div>
+<span class="text-xl font-bold">AEGIS CAPITAL | Buyer Matching Engine</span>
+</div>
+</div>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 py-8">
+
+<!-- Stats -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-3xl font-bold text-navy">50+</div>
+<div class="text-sm text-gray-500">Active Buyers</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-3xl font-bold gold">$15M+</div>
+<div class="text-sm text-gray-500">Total Buy Power</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-3xl font-bold text-green-600">12</div>
+<div class="text-sm text-gray-500">States Covered</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-3xl font-bold text-navy">0</div>
+<div class="text-sm text-gray-500">Pending Matches</div>
+</div>
+</div>
+
+<!-- Search & Filter -->
+<div class="bg-white rounded-xl shadow p-6 mb-8">
+<h2 class="text-xl font-bold text-navy mb-4">🔍 Find Buyers for Your Deal</h2>
+<div class="grid md:grid-cols-4 gap-4">
+<div>
+<label class="block text-sm font-medium mb-1">State</label>
+<select id="filterState" class="w-full px-3 py-2 border rounded-lg">
+<option value="">All States</option>
+<option value="TX">Texas</option>
+<option value="FL">Florida</option>
+<option value="GA">Georgia</option>
+<option value="AZ">Arizona</option>
+<option value="CO">Colorado</option>
+<option value="IN">Indiana</option>
+<option value="OH">Ohio</option>
+<option value="MO">Missouri</option>
+<option value="TN">Tennessee</option>
+<option value="AL">Alabama</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Min Price</label>
+<input id="filterMin" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="50000">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Max Price</label>
+<input id="filterMax" type="number" class="w-full px-3 py-2 border rounded-lg" placeholder="500000">
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Property Type</label>
+<select id="filterType" class="w-full px-3 py-2 border rounded-lg">
+<option value="">All Types</option>
+<option value="sfr">Single Family</option>
+<option value="multi">Multi-Family</option>
+<option value="condo">Condo/Townhome</option>
+<option value="land">Land</option>
+</select>
+</div>
+</div>
+<div class="mt-4">
+<button onclick="filterBuyers()" class="w-full navy py-3 rounded-lg font-bold">Find Matching Buyers</button>
+</div>
+</div>
+
+<!-- Buyer Profiles -->
+<div id="buyerList">
+<h2 class="text-xl font-bold text-navy mb-4">👥 Institutional Buyer Profiles</h2>
+
+<!-- Example Buyer 1 -->
+<div class="buyer-card shadow-lg" data-state="TX" data-min="50000" data-max="250000" data-type="sfr">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-lg font-bold text-navy">Houston Home Buyers LLC</h3>
+<div class="text-sm text-gray-500">Primary Market: Houston, TX | Cash Buyer | Closes in 7-14 days</div>
+</div>
+<span class="match-badge">12 ACTIVE DEALS</span>
+</div>
+
+<div class="buy-box">
+<div class="font-bold text-navy mb-2">📦 BUY BOX (What They Want)</div>
+<div class="grid md:grid-cols-2 gap-2 text-sm">
+<div><strong>Price Range:</strong> $50K - $250K</div>
+<div><strong>States:</strong> TX only</div>
+<div><strong>Cities:</strong> Houston, Katy, Sugar Land, Pearland</div>
+<div><strong>Property Type:</strong> Single Family, Townhomes</div>
+<div><strong>Min Sqft:</strong> 1,000</div>
+<div><strong>Max Sqft:</strong> 3,500</div>
+<div><strong>Bedrooms:</strong> 3-5</div>
+<div><strong>Bathrooms:</strong> 2+</div>
+<div><strong>Year Built:</strong> 1970+</div>
+<div><strong>Condition:</strong> Any — they rehab everything</div>
+</div>
+<div class="mt-3 p-2 bg-yellow-50 rounded text-sm">
+<strong>🚫 WON'T BUY:</strong> Condos, properties with foundation issues, homes built before 1950
+</div>
+</div>
+
+<div class="mt-4 grid md:grid-cols-3 gap-2">
+<div class="bg-gray-50 p-2 rounded text-center">
+<div class="font-bold">Volume</div>
+<div class="text-sm">5-8 deals/month</div>
+</div>
+<div class="bg-gray-50 p-2 rounded text-center">
+<div class="font-bold">Typical Fee</div>
+<div class="text-sm">$15K-25K</div>
+</div>
+<div class="bg-gray-50 p-2 rounded text-center">
+<div class="font-bold">Contact</div>
+<div class="text-sm">(713) 555-0200</div>
+</div>
+</div>
+</div>
+
+<!-- Example Buyer 2 -->
+<div class="buyer-card shadow-lg" data-state="TX" data-min="100000" data-max="500000" data-type="multi">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-lg font-bold text-navy">TX Cash Investors</h3>
+<div class="text-sm text-gray-500">Primary Market: Dallas-Fort Worth, TX | Buy & Hold + Fix & Flip</div>
+</div>
+<span class="match-badge">8 ACTIVE DEALS</span>
+</div>
+
+<div class="buy-box">
+<div class="font-bold text-navy mb-2">📦 BUY BOX (What They Want)</div>
+<div class="grid md:grid-cols-2 gap-2 text-sm">
+<div><strong>Price Range:</strong> $100K - $500K</div>
+<div><strong>States:</strong> TX, OK</div>
+<div><strong>Cities:</strong> Dallas, Fort Worth, Arlington, Plano, Frisco</div>
+<div><strong>Property Type:</strong> Single Family, Duplexes, Fourplexes</div>
+<div><strong>Min Sqft:</strong> 1,200</div>
+<div><strong>Max Sqft:</strong> 5,000</div>
+<div><strong>Bedrooms:</strong> 3-6</div>
+<div><strong>Bathrooms:</strong> 2+</div>
+<div><strong>Year Built:</strong> 1960+</div>
+<div><strong>Condition:</strong> Light rehab to full gut — they do both</div>
+</div>
+<div class="mt-3 p-2 bg-red-50 rounded text-sm">
+<strong>🚫 WON'T BUY:</strong> Rural properties >1 hour from city, homes with active litigation, properties with environmental issues
+</div>
+</div>
+
+<div class="mt-4 grid md:grid-cols-3 gap-2">
+<div class="bg-gray-50 p-2 rounded text-center">
+<div class="font-bold">Volume</div>
+<div class="text-sm">3-5 deals/month</div>
+</div>
+<div class="bg-gray-50 p-2 rounded text-center">
+<div class="font-bold">Typical Fee</div>
+<div class="text-sm">$20K-40K</div>
+</div>
+<div class="bg-gray-50 p-2 rounded text-center">
+<div class="font-bold">Contact</div>
+<div class="text-sm">(832) 555-0300</div>
+</div>
+</div>
+</div>
+
+<!-- Example Buyer 3 -->
+<div class="buyer-card shadow-lg" data-state="FL" data-min="75000" data-max="400000" data-type="sfr">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-lg font-bold text-navy">Sunshine Capital Group</h3>
+<div class="text-sm text-gray-500">Primary Market: Tampa, Orlando, Miami | Institutional Buyer | 48-Hour Close</div>
+</div>
+<span class="match-badge">15 ACTIVE DEALS</span>
+</div>
+
+<div class="buy-box">
+<div class="font-bold text-navy mb-2">📦 BUY BOX (What They Want)</div>
+<div class="grid md:grid-cols-2 gap-2 text-sm">
+<div><strong>Price Range:</strong> $75K - $400K</div>
+<div><strong>States:</strong> FL, GA, SC</div>
+<div><strong>Cities:</strong> Tampa, Orlando, Miami, Jacksonville, Atlanta</div>
+<div><strong>Property Type:</strong> Single Family, Condos, Townhomes</div>
+<div><strong>Min Sqft:</strong> 800</div>
+<div><strong>Max Sqft:</strong> 4,000</div>
+<div><strong>Bedrooms:</strong> 2-5</div>
+<div><strong>Bathrooms:</strong> 1.5+</div>
+<div><strong>Year Built:</strong> 1980+</div>
+<div><strong>Condition:</strong> Move-in ready to light rehab</div>
+</div>
+<div class="mt-3 p-2 bg-red-50 rounded text-sm">
+<strong>🚫 WON'T BUY:</strong> Properties needing >$50K rehab, homes built before 1970, properties in flood zones without elevation certificate
+</div>
+</div>
+
+<div class="mt-4 grid md:grid-cols-3 gap-2">
+<div class="bg-gray-50 p-2 rounded text-center">
+<div class="font-bold">Volume</div>
+<div class="text-sm">8-12 deals/month</div>
+</div>
+<div class="bg-gray-50 p-2 rounded text-center">
+<div class="font-bold">Typical Fee</div>
+<div class="text-sm">$15K-30K</div>
+</div>
+<div class="bg-gray-50 p-2 rounded text-center">
+<div class="font-bold">Contact</div>
+<div class="text-sm">(813) 555-0450</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Add New Buyer Button -->
+<div class="text-center mt-8">
+<button onclick="addBuyer()" class="navy px-8 py-3 rounded-lg font-bold">➕ Add New Buyer to Database</button>
+</div>
+
+</div>
+
+<script>
+// Buyer database in localStorage
+const DEFAULT_BUYERS = [
+{
+name: "Houston Home Buyers LLC",
+market: "Houston, TX",
+states: ["TX"],
+cities: ["Houston", "Katy", "Sugar Land", "Pearland"],
+minPrice: 50000,
+maxPrice: 250000,
+types: ["sfr", "townhome"],
+minSqft: 1000,
+maxSqft: 3500,
+beds: "3-5",
+baths: "2+",
+yearBuilt: "1970+",
+condition: "Any — they rehab everything",
+wontBuy: ["Condos", "Foundation issues", "Pre-1950 homes"],
+volume: "5-8/month",
+fee: "$15K-25K",
+phone: "(713) 555-0200",
+email: "deals@houstonhomebuyers.com",
+closeTime: "7-14 days",
+active: 12
+},
+{
+name: "TX Cash Investors",
+market: "Dallas-Fort Worth, TX",
+states: ["TX", "OK"],
+cities: ["Dallas", "Fort Worth", "Arlington", "Plano", "Frisco"],
+minPrice: 100000,
+maxPrice: 500000,
+types: ["sfr", "duplex", "fourplex"],
+minSqft: 1200,
+maxSqft: 5000,
+beds: "3-6",
+baths: "2+",
+yearBuilt: "1960+",
+condition: "Light rehab to full gut",
+wontBuy: ["Rural >1hr from city", "Active litigation", "Environmental issues"],
+volume: "3-5/month",
+fee: "$20K-40K",
+phone: "(832) 555-0300",
+email: "acquisitions@txcash.com",
+closeTime: "10-21 days",
+active: 8
+},
+{
+name: "Sunshine Capital Group",
+market: "Tampa, Orlando, Miami",
+states: ["FL", "GA", "SC"],
+cities: ["Tampa", "Orlando", "Miami", "Jacksonville", "Atlanta"],
+minPrice: 75000,
+maxPrice: 400000,
+types: ["sfr", "condo", "townhome"],
+minSqft: 800,
+maxSqft: 4000,
+beds: "2-5",
+baths: "1.5+",
+yearBuilt: "1980+",
+condition: "Move-in ready to light rehab",
+wontBuy: [">$50K rehab", "Pre-1970", "Flood zone without cert"],
+volume: "8-12/month",
+fee: "$15K-30K",
+phone: "(813) 555-0450",
+email: "buy@sunshinecapital.com",
+closeTime: "48 hours",
+active: 15
+}
+];
+
+function filterBuyers() {
+const state = document.getElementById('filterState').value;
+const min = document.getElementById('filterMin').value;
+const max = document.getElementById('filterMax').value;
+const type = document.getElementById('filterType').value;
+
+const cards = document.querySelectorAll('.buyer-card');
+cards.forEach(card => {
+const cardState = card.dataset.state;
+const cardMin = parseInt(card.dataset.min);
+const cardMax = parseInt(card.dataset.max);
+const cardType = card.dataset.type;
+
+let show = true;
+if (state && cardState !== state) show = false;
+if (min && cardMax < parseInt(min)) show = false;
+if (max && cardMin > parseInt(max)) show = false;
+if (type && cardType !== type) show = false;
+
+card.style.display = show ? 'block' : 'none';
+});
+}
+
+function addBuyer() {
+const name = prompt("Buyer company name:");
+if (!name) return;
+const state = prompt("Primary state (2-letter code):");
+const min = prompt("Minimum price they'll pay:");
+const max = prompt("Maximum price they'll pay:");
+const phone = prompt("Phone number:");
+
+const buyer = {
+name, states: [state], minPrice: parseInt(min), maxPrice: parseInt(max),
+phone, market: state, dateAdded: new Date().toISOString()
+};
+
+const buyers = JSON.parse(localStorage.getItem('aegis_buyers') || '[]');
+buyers.push(buyer);
+localStorage.setItem('aegis_buyers', JSON.stringify(buyers));
+
+alert(`${name} added to buyer database!`);
+}
+
+// Initialize
+localStorage.setItem('aegis_buyers', JSON.stringify(DEFAULT_BUYERS));
+</script>
+</body>
+</html>
