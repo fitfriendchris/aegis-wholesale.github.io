@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegis Capital | Rich Lead Detail</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { font-family: 'Inter', sans-serif; background: #FFF8F0; }
+.navy { background-color: #1A3A5C; color: white; }
+.gold { color: #C9A227; }
+.info-card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+.label { font-size: 12px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px; }
+.value { font-size: 16px; font-weight: 600; color: #1A3A5C; }
+</style>
+</head>
+<body class="min-h-screen pb-20">
+<div class="navy py-6 px-4 sticky top-0 z-50">
+<div class="max-w-4xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center">🏠</div>
+<div>
+<div class="text-xl font-bold">AEGIS CAPITAL</div>
+<div class="text-sm text-gray-300">Rich Lead Detail View</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="max-w-4xl mx-auto px-4 py-6">
+
+<!-- Lead Header -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<div class="flex justify-between items-start">
+<div>
+<div class="text-sm text-gray-500 mb-1">Motivation Score: 9.2/10 🔥</div>
+<h1 class="text-2xl font-bold text-navy mb-2">4521 Oak Ridge Drive</h1>
+<div class="text-gray-600">Houston, TX 77021 | Harris County</div>
+<div class="mt-2 flex gap-2">
+<span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-bold">Pre-Foreclosure</span>
+<span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-bold">Auction in 45 Days</span>
+</div>
+</div>
+<div class="text-right">
+<div class="text-sm text-gray-500">Assignment Fee</div>
+<div class="text-3xl font-bold gold">$32,500</div>
+</div>
+</div>
+</div>
+
+<!-- Quick Stats Row -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-2xl font-bold text-navy">$145K</div>
+<div class="text-xs text-gray-500">Offer Price</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-2xl font-bold text-green-600">$220K</div>
+<div class="text-xs text-gray-500">ARV</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-2xl font-bold text-red-600">$42K</div>
+<div class="text-xs text-gray-500">Repairs</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-2xl font-bold gold">22.3%</div>
+<div class="text-xs text-gray-500">Discount to ARV</div>
+</div>
+</div>
+
+<!-- Property Specs -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-xl font-bold text-navy mb-4">📐 Property Specifications</h2>
+<div class="grid md:grid-cols-3 gap-4">
+<div class="info-card">
+<div class="label">Year Built</div>
+<div class="value">1978 (47 years old)</div>
+</div>
+<div class="info-card">
+<div class="label">Square Footage</div>
+<div class="value">2,340 sqft</div>
+</div>
+<div class="info-card">
+<div class="label">Lot Size</div>
+<div class="value">0.25 acres (10,890 sqft)</div>
+</div>
+<div class="info-card">
+<div class="label">Bedrooms / Bathrooms</div>
+<div class="value">4 BR / 2.5 BA</div>
+</div>
+<div class="info-card">
+<div class="label">Property Type</div>
+<div class="value">Single Family Residence</div>
+</div>
+<div class="info-card">
+<div class="label">Stories</div>
+<div class="value">2-Story</div>
+</div>
+<div class="info-card">
+<div class="label">Garage</div>
+<div class="value">2-Car Attached</div>
+</div>
+<div class="info-card">
+<div class="label">Pool</div>
+<div class="value">No</div>
+</div>
+<div class="info-card">
+<div class="label">Roof</div>
+<div class="value">Composition Shingle (2015)</div>
+</div>
+</div>
+</div>
+
+<!-- Financial Details -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-xl font-bold text-navy mb-4">💰 Financial Details</h2>
+<div class="grid md:grid-cols-2 gap-4">
+<div>
+<div class="info-card">
+<div class="label">Estimated ARV</div>
+<div class="value">$220,000</div>
+</div>
+<div class="info-card">
+<div class="label">Repair Estimate</div>
+<div class="value">$42,000 (Full rehab needed)</div>
+</div>
+<div class="info-card">
+<div class="label">MAO (Max Allowable Offer)</div>
+<div class="value">$132,000 (ARV × 70% − Repairs)</div>
+</div>
+</div>
+<div>
+<div class="info-card">
+<div class="label">Recommended Offer</div>
+<div class="value">$145,000 (Above MAO for motivation)</div>
+</div>
+<div class="info-card">
+<div class="label">Assignment Fee</div>
+<div class="value gold">$32,500 (Buyer pays $177.5K)</div>
+</div>
+<div class="info-card">
+<div class="label">Days to Close</div>
+<div class="value">7-14 days (Cash buyer ready)</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Tax & Legal -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-xl font-bold text-navy mb-4">⚖️ Tax & Legal Status</h2>
+<div class="grid md:grid-cols-2 gap-4">
+<div>
+<div class="info-card">
+<div class="label">2025 Property Tax</div>
+<div class="value">$3,847 (Paid)</div>
+</div>
+<div class="info-card">
+<div class="label">Tax Delinquent?</div>
+<div class="value text-green-600">No — Current</div>
+</div>
+</div>
+<div>
+<div class="info-card">
+<div class="label">Foreclosure Status</div>
+<div class="value text-red-600">Active — NOD filed 2026-03-15</div>
+</div>
+<div class="info-card">
+<div class="label">Auction Date</div>
+<div class="value text-red-600">June 24, 2026 (45 days)</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Owner Information -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-xl font-bold text-navy mb-4">👤 Owner Information</h2>
+<div class="grid md:grid-cols-2 gap-4">
+<div>
+<div class="info-card">
+<div class="label">Primary Owner</div>
+<div class="value">John Michael Smith</div>
+</div>
+<div class="info-card">
+<div class="label">Phone Numbers</div>
+<div class="value">(713) 555-0142 (Primary)</div>
+<div class="text-sm text-gray-500">(281) 555-0891 (Secondary)</div>
+</div>
+<div class="info-card">
+<div class="label">Email</div>
+<div class="value">john.smith78@email.com</div>
+</div>
+</div>
+<div>
+<div class="info-card">
+<div class="label">Mailing Address</div>
+<div class="value">4521 Oak Ridge Dr</div>
+<div class="text-sm text-gray-500">Houston, TX 77021</div>
+</div>
+<div class="info-card">
+<div class="label">Age / Demographics</div>
+<div class="value">48 years old</div>
+<div class="text-sm text-gray-500">Married, 2 children</div>
+</div>
+<div class="info-card">
+<div class="label">Social Profiles</div>
+<div class="value"><a href="#" class="text-blue-600">Facebook</a> | <a href="#" class="text-blue-600">LinkedIn</a></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Mortgage & Liens -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-xl font-bold text-navy mb-4">🏦 Mortgage & Liens</h2>
+<div class="info-card">
+<div class="label">First Mortgage</div>
+<div class="value">Wells Fargo — $178,000 original, $156,400 remaining</div>
+</div>
+<div class="info-card">
+<div class="label">Second Mortgage / HELOC</div>
+<div class="value">None found</div>
+</div>
+<div class="info-card">
+<div class="label">Other Liens</div>
+<div class="value">IRS Tax Lien: $12,400 (filed 2024) | HOA Lien: $3,200</div>
+</div>
+<div class="info-card">
+<div class="label">Total Debt Against Property</div>
+<div class="value text-red-600">$171,600 (Mortgage + Liens)</div>
+</div>
+</div>
+
+<!-- Market Context -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-xl font-bold text-navy mb-4">📊 Market Context</h2>
+<div class="grid md:grid-cols-2 gap-4">
+<div>
+<div class="info-card">
+<div class="label">Zestimate</div>
+<div class="value">$218,000 (+2% last 30 days)</div>
+</div>
+<div class="info-card">
+<div class="label">Neighborhood Median</div>
+<div class="value">$235,000</div>
+</div>
+<div class="info-card">
+<div class="label">Days on Market (Area)</div>
+<div class="value">23 days average</div>
+</div>
+</div>
+<div>
+<div class="info-card">
+<div class="label">Comparable Sales (Last 6 Months)</div>
+<div class="value">4450 Oak Ridge: $225K (Mar 2026)</div>
+<div class="text-sm text-gray-500">4600 Oak Ridge: $212K (Feb 2026)</div>
+<div class="text-sm text-gray-500">4505 Oak Ridge: $231K (Jan 2026)</div>
+</div>
+<div class="info-card">
+<div class="label">School District</div>
+<div class="value">Houston ISD — Oak Ridge Elementary (6/10)</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Photos & Street View -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-xl font-bold text-navy mb-4">📸 Property & Street View</h2>
+<div class="grid md:grid-cols-2 gap-4">
+<div class="bg-gray-100 rounded-lg h-48 flex items-center justify-center">
+<div class="text-center text-gray-500">
+<div class="text-4xl mb-2">🏠</div>
+<div>Google Street View</div>
+<a href="https://www.google.com/maps/search/?api=1&query=4521+Oak+Ridge+Dr,+Houston,+TX+77021" target="_blank" class="text-blue-600 text-sm hover:underline">Open in Maps →</a>
+</div>
+</div>
+<div class="bg-gray-100 rounded-lg h-48 flex items-center justify-center">
+<div class="text-center text-gray-500">
+<div class="text-4xl mb-2">🛰️</div>
+<div>Satellite View</div>
+<a href="https://www.google.com/maps/place/4521+Oak+Ridge+Dr,+Houston,+TX+77021/@29.7604,-95.3698,18z" target="_blank" class="text-blue-600 text-sm hover:underline">Open Satellite →</a>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Call Script -->
+<div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+<h2 class="text-xl font-bold text-navy mb-4">💬 Recommended Call Script</h2>
+<div class="bg-gray-50 rounded-lg p-4 font-mono text-sm">
+"Hi John, this is [YOUR NAME] with Aegis Capital. I'm calling about your property at 4521 Oak Ridge Drive. I understand there's a foreclosure auction scheduled for June 24th — I buy houses fast for cash before they go to auction. No repairs needed, no realtor fees, close in 7 days. Would you be open to a cash offer that could stop the foreclosure and put money in your pocket?"
+</div>
+<div class="mt-3 flex gap-3">
+<button onclick="copyScript()" class="flex-1 bg-blue-600 text-white py-2 rounded-lg font-bold">📋 Copy Script</button>
+<a href="tel:7135550142" class="flex-1 bg-green-600 text-white py-2 rounded-lg font-bold text-center">📞 Call Now</a>
+</div>
+</div>
+
+<!-- Action Buttons -->
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 flex gap-3 max-w-4xl mx-auto">
+<button onclick="addToPipeline()" class="flex-1 navy py-3 rounded-lg font-bold">➕ Add to Pipeline</button>
+<button onclick="generateContract()" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-bold">⚖️ Generate Contract</button>
+<button onclick="matchBuyer()" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-bold">👥 Match Buyer</button>
+</div>
+
+</div>
+
+<script>
+function copyScript() {
+const script = document.querySelector('.font-mono').textContent;
+navigator.clipboard.writeText(script).then(() => {
+alert('Script copied!');
+});
+}
+
+function addToPipeline() {
+const deal = {
+address: "4521 Oak Ridge Dr, Houston, TX 77021",
+arv: 220000,
+repairs: 42000,
+offer: 145000,
+fee: 32500,
+status: "analyzing",
+date: new Date().toISOString()
+};
+const pipeline = JSON.parse(localStorage.getItem('aegis_pipeline') || '[]');
+pipeline.push(deal);
+localStorage.setItem('aegis_pipeline', JSON.stringify(pipeline));
+alert('Added to pipeline! View in Dashboard.');
+}
+
+function generateContract() {
+window.location.href = 'contract-generator.html';
+}
+
+function matchBuyer() {
+const buyers = [
+{ name: "Houston Home Buyers LLC", phone: "713-555-0200", buyBox: "$100K-200K" },
+{ name: "TX Cash Investors", phone: "832-555-0300", buyBox: "$120K-250K" }
+];
+const matched = buyers[0];
+alert(`Matched: ${matched.name}\nPhone: ${matched.phone}\nBuy Box: ${matched.buyBox}`);
+}
+</script>
+</body>
+</html>
