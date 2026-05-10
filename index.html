@@ -3,327 +3,197 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aegis Capital | Off-Market Real Estate Deals</title>
+<title>Aegis Capital | Complete Deal System v5.1</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-body { font-family: 'Inter', sans-serif; }
-h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; }
-.gold-accent { color: #C9A227; }
-.navy-bg { background-color: #1A3A5C; }
-.cream-bg { background-color: #FFF8F0; }
+body { font-family: 'Inter', sans-serif; background: #FFF8F0; }
+.navy { background-color: #1A3A5C; color: white; }
+.gold { color: #C9A227; }
+.tool-card { background: white; border-radius: 16px; padding: 24px; transition: all 0.2s; }
+.tool-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
 </style>
 </head>
-<body class="cream-bg">
+<body class="min-h-screen">
 
-<!-- Hero -->
-<section class="navy-bg text-white min-h-screen flex items-center">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-<div class="grid lg:grid-cols-2 gap-12 items-center">
+<!-- Header -->
+<div class="navy py-6 px-4">
+<div class="max-w-7xl mx-auto">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center text-2xl">🏛️</div>
 <div>
-<div class="flex items-center gap-3 mb-6">
-<div class="w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center">
-<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+<div class="text-2xl font-bold">AEGIS CAPITAL</div>
+<div class="text-sm text-gray-300">Complete Real Estate System v5.1</div>
 </div>
-<span class="text-xl font-bold tracking-wider">AEGIS CAPITAL</span>
 </div>
-<h1 class="text-5xl lg:text-7xl font-extrabold mb-6 leading-tight">
-Off-Market<br>Deals.<br><span class="gold-accent">Institutional</span><br>Buyers.
-</h1>
-<p class="text-xl text-gray-300 mb-8 max-w-lg">
-We source distressed properties and match them to verified institutional buyers. 
-No fluff. Just deals.
-</p>
-<div class="flex gap-4">
-<a href="#seller" class="bg-yellow-500 text-navy-bg px-8 py-4 rounded-lg font-bold text-lg hover:bg-yellow-400 transition">
-Sell Your Property
+<div class="text-right">
+<div class="text-sm text-gray-300">Project</div>
+<div class="font-bold">p_1778324230_fd9650</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Quick Stats -->
+<div class="max-w-7xl mx-auto px-4 py-6">
+<div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-2xl font-bold text-navy">50+</div>
+<div class="text-xs text-gray-500">Buyers</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-2xl font-bold gold">$15M+</div>
+<div class="text-xs text-gray-500">Buy Power</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-2xl font-bold text-green-600">$0</div>
+<div class="text-xs text-gray-500">Cost</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-2xl font-bold text-navy">10</div>
+<div class="text-xs text-gray-500">States</div>
+</div>
+<div class="bg-white rounded-xl shadow p-4 text-center">
+<div class="text-2xl font-bold gold">$90K+</div>
+<div class="text-xs text-gray-500">Potential/Mo</div>
+</div>
+</div>
+</div>
+
+<!-- Tools Grid -->
+<div class="max-w-7xl mx-auto px-4 pb-12">
+<h2 class="text-2xl font-bold text-navy mb-6">🛠️ System Tools</h2>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+<!-- Lead Finder -->
+<a href="lead-finder.html" class="tool-card block">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-xl">🔥</div>
+<h3 class="text-lg font-bold text-navy">Lead Finder</h3>
+</div>
+<p class="text-sm text-gray-600 mb-3">Find motivated sellers online: pre-foreclosure, tax delinquent, absentee owners, out-of-date listings.</p>
+<div class="flex gap-2 text-xs">
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded">FREE</span>
+<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded">30 leads/day</span>
+</div>
 </a>
-<a href="#buyer" class="border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-navy-bg transition">
-Join Buyer List
+
+<!-- Deal Scanner -->
+<a href="scanner.html" class="tool-card block">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-xl">📡</div>
+<h3 class="text-lg font-bold text-navy">Deal Scanner</h3>
+</div>
+<p class="text-sm text-gray-600 mb-3">Automated daily scans across all sources. One-click scripts and instant lead capture.</p>
+<div class="flex gap-2 text-xs">
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded">Auto-runs</span>
+<span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded">9 AM daily</span>
+</div>
+</a>
+
+<!-- Buyer Database -->
+<a href="buyers.html" class="tool-card block">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-xl">👥</div>
+<h3 class="text-lg font-bold text-navy">Buyer Database</h3>
+</div>
+<p class="text-sm text-gray-600 mb-3">50+ institutional buyers with detailed buy-boxes: price, specs, condition, exclusions.</p>
+<div class="flex gap-2 text-xs">
+<span class="px-2 py-1 bg-purple-100 text-purple-700 rounded">50+ buyers</span>
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded">12 states</span>
+</div>
+</a>
+
+<!-- Auto Matcher -->
+<a href="matcher.html" class="tool-card block">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-xl">🔗</div>
+<h3 class="text-lg font-bold text-navy">Auto Matcher</h3>
+</div>
+<p class="text-sm text-gray-600 mb-3">Enter your deal details — system scores and matches every buyer who wants it. 100-point algorithm.</p>
+<div class="flex gap-2 text-xs">
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded">Instant</span>
+<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded">Auto-rank</span>
+</div>
+</a>
+
+<!-- Deal Analyzer -->
+<a href="deal-analyzer.html" class="tool-card block">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-xl">📊</div>
+<h3 class="text-lg font-bold text-navy">Deal Analyzer</h3>
+</div>
+<p class="text-sm text-gray-600 mb-3">Calculate ARV, MAO, repair estimates, and assignment fees. Pipeline tracking included.</p>
+<div class="flex gap-2 text-xs">
+<span class="px-2 py-1 bg-orange-100 text-orange-700 rounded">Calculates</span>
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded">Auto-saves</span>
+</div>
+</a>
+
+<!-- Contract Generator -->
+<a href="contract-generator.html" class="tool-card block">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-xl">⚖️</div>
+<h3 class="text-lg font-bold text-navy">Contract Generator</h3>
+</div>
+<p class="text-sm text-gray-600 mb-3">Generate state-specific purchase agreements with built-in e-sign (ESIGN Act compliant).</p>
+<div class="flex gap-2 text-xs">
+<span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded">E-sign</span>
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded">Unlimited</span>
+</div>
+</a>
+
+<!-- Lead Detail -->
+<a href="lead-detail.html" class="tool-card block">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-xl">🏠</div>
+<h3 class="text-lg font-bold text-navy">Rich Lead Detail</h3>
+</div>
+<p class="text-sm text-gray-600 mb-3">Complete property specs, owner intelligence, financials, legal status, market context.</p>
+<div class="flex gap-2 text-xs">
+<span class="px-2 py-1 bg-teal-100 text-teal-700 rounded">Full intel</span>
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded">Skip traced</span>
+</div>
+</a>
+
+<!-- Dashboard -->
+<a href="dashboard.html" class="tool-card block">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl">📈</div>
+<h3 class="text-lg font-bold text-navy">Dashboard</h3>
+</div>
+<p class="text-sm text-gray-600 mb-3">Track active deals, monthly profit, leads, and buyer count. Auto-syncs from all tools.</p>
+<div class="flex gap-2 text-xs">
+<span class="px-2 py-1 bg-gray-100 text-gray-700 rounded">Real-time</span>
+<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded">Auto-sync</span>
+</div>
+</a>
+
+<!-- Email Templates -->
+<a href="email-templates.html" class="tool-card block">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-xl">✉️</div>
+<h3 class="text-lg font-bold text-navy">Email Templates</h3>
+</div>
+<p class="text-sm text-gray-600 mb-3">Copy-paste outreach templates for sellers, buyers, agents. All scripts included.</p>
+<div class="flex gap-2 text-xs">
+<span class="px-2 py-1 bg-pink-100 text-pink-700 rounded">Templates</span>
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded">Copy-paste</span>
+</div>
 </a>
 </div>
 </div>
-<div class="hidden lg:block">
-<div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
-<div class="flex items-center justify-between mb-4">
-<span class="text-sm text-gray-300">Latest Deal</span>
-<span class="bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">ACTIVE</span>
-</div>
-<div class="space-y-3">
-<div class="flex justify-between"><span class="text-gray-300">Address</span><span class="font-semibold">Houston, TX 77001</span></div>
-<div class="flex justify-between"><span class="text-gray-300">ARV</span><span class="font-semibold text-green-400">$340,000</span></div>
-<div class="flex justify-between"><span class="text-gray-300">Asking</span><span class="font-semibold">$200,000</span></div>
-<div class="flex justify-between"><span class="text-gray-300">Assignment Fee</span><span class="font-semibold gold-accent">$15,000</span></div>
-</div>
-<div class="mt-6 pt-6 border-t border-white/20">
-<div class="flex justify-between items-center">
-<span class="text-sm text-gray-300">3 buyers matched</span>
-<button class="bg-yellow-500 text-navy-bg px-4 py-2 rounded font-bold text-sm">View Details</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- Stats -->
-<section class="py-16 bg-white">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-<div>
-<div class="text-4xl font-extrabold text-navy-bg">$2.4M+</div>
-<div class="text-gray-600 mt-2">Deal Volume</div>
-</div>
-<div>
-<div class="text-4xl font-extrabold text-navy-bg">47</div>
-<div class="text-gray-600 mt-2">Buyers Active</div>
-</div>
-<div>
-<div class="text-4xl font-extrabold text-navy-bg">12</div>
-<div class="text-gray-600 mt-2">Deals Closed</div>
-</div>
-<div>
-<div class="text-4xl font-extrabold text-navy-bg">7 Days</div>
-<div class="text-gray-600 mt-2">Avg Close Time</div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- How It Works -->
-<section id="seller" class="py-20 cream-bg">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<h2 class="text-4xl font-extrabold text-navy-bg text-center mb-16">How It Works</h2>
-<div class="grid md:grid-cols-3 gap-12">
-<div class="text-center">
-<div class="w-16 h-16 bg-navy-bg text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">1</div>
-<h3 class="text-xl font-bold text-navy-bg mb-4">We Find Off-Market Deals</h3>
-<p class="text-gray-600">Through direct outreach, county records, and our network — we find properties before they hit the MLS.</p>
-</div>
-<div class="text-center">
-<div class="w-16 h-16 bg-navy-bg text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">2</div>
-<h3 class="text-xl font-bold text-navy-bg mb-4">Match to Verified Buyers</h3>
-<p class="text-gray-600">Our database of institutional buyers (REITs, iBuyers, hedge funds) gets first look. No tire kickers.</p>
-</div>
-<div class="text-center">
-<div class="w-16 h-16 bg-navy-bg text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">3</div>
-<h3 class="text-xl font-bold text-navy-bg mb-4">Close Fast</h3>
-<p class="text-gray-600">7-14 day closes. Cash. No financing contingencies. No surprises.</p>
-</div>
-</div>
-</div>
-</section>
-
-<!-- Seller Form -->
-<section class="py-20 navy-bg text-white">
-<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-<h2 class="text-4xl font-extrabold text-center mb-8">Sell Your Property</h2>
-<p class="text-center text-gray-300 mb-12">Get a cash offer in 24 hours. Close in 7 days. No repairs needed.</p>
-<form id="sellerForm" class="space-y-6">
-<div class="grid md:grid-cols-2 gap-6">
-<div>
-<label class="block text-sm font-medium mb-2">Property Address</label>
-<input type="text" id="address" required class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-500" placeholder="123 Main St, Houston, TX">
-</div>
-<div>
-<label class="block text-sm font-medium mb-2">Your Name</label>
-<input type="text" id="name" required class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-500" placeholder="John Doe">
-</div>
-</div>
-<div class="grid md:grid-cols-2 gap-6">
-<div>
-<label class="block text-sm font-medium mb-2">Phone</label>
-<input type="tel" id="phone" required class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-500" placeholder="+1 (555) 000-0000">
-</div>
-<div>
-<label class="block text-sm font-medium mb-2">Email</label>
-<input type="email" id="email" required class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-500" placeholder="john@example.com">
-</div>
-</div>
-<div>
-<label class="block text-sm font-medium mb-2">Property Condition</label>
-<select id="condition" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-yellow-500">
-<option value="">Select condition...</option>
-<option value="excellent">Excellent — move-in ready</option>
-<option value="good">Good — minor updates needed</option>
-<option value="fair">Fair — needs repairs</option>
-<option value="poor">Poor — major renovation needed</option>
-<option value="distressed">Distressed — uninhabitable</option>
-</select>
-</div>
-<div>
-<label class="block text-sm font-medium mb-2">Timeline to Sell</label>
-<select id="timeline" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-yellow-500">
-<option value="">Select timeline...</option>
-<option value="asap">ASAP — 7 days</option>
-<option value="2weeks">2 weeks</option>
-<option value="30days">30 days</option>
-<option value="flexible">Flexible</option>
-</select>
-</div>
-<div>
-<label class="block text-sm font-medium mb-2">Additional Notes</label>
-<textarea id="notes" rows="3" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-500" placeholder="Any details about the property..."></textarea>
-</div>
-<button type="submit" class="w-full bg-yellow-500 text-navy-bg py-4 rounded-lg font-bold text-lg hover:bg-yellow-400 transition">
-Get My Cash Offer
-</button>
-</form>
-<div id="formSuccess" class="hidden mt-6 p-4 bg-green-500/20 border border-green-500 rounded-lg text-center">
-<p class="text-green-400 font-bold">✓ Submitted! We'll contact you within 24 hours.</p>
-</div>
-</div>
-</section>
-
-<!-- Buyer List -->
-<section id="buyer" class="py-20 cream-bg">
-<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-<h2 class="text-4xl font-extrabold text-navy-bg text-center mb-8">Join Our Buyer List</h2>
-<p class="text-center text-gray-600 mb-12">Get first access to off-market deals. No spam. Just properties that match your criteria.</p>
-<form id="buyerForm" class="space-y-6 bg-white p-8 rounded-2xl shadow-lg">
-<div class="grid md:grid-cols-2 gap-6">
-<div>
-<label class="block text-sm font-medium text-gray-700 mb-2">Company Name</label>
-<input type="text" id="company" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-yellow-500" placeholder="Your company">
-</div>
-<div>
-<label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
-<input type="text" id="buyerName" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-yellow-500" placeholder="Full name">
-</div>
-</div>
-<div class="grid md:grid-cols-2 gap-6">
-<div>
-<label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-<input type="email" id="buyerEmail" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-yellow-500" placeholder="you@company.com">
-</div>
-<div>
-<label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-<input type="tel" id="buyerPhone" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-yellow-500" placeholder="+1 (555) 000-0000">
-</div>
-</div>
-<div class="grid md:grid-cols-3 gap-6">
-<div>
-<label class="block text-sm font-medium text-gray-700 mb-2">Min Price</label>
-<input type="number" id="minPrice" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-yellow-500" placeholder="$100,000">
-</div>
-<div>
-<label class="block text-sm font-medium text-gray-700 mb-2">Max Price</label>
-<input type="number" id="maxPrice" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-yellow-500" placeholder="$600,000">
-</div>
-<div>
-<label class="block text-sm font-medium text-gray-700 mb-2">Target Markets</label>
-<input type="text" id="markets" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-yellow-500" placeholder="Houston, Dallas, Austin">
-</div>
-</div>
-<div>
-<label class="block text-sm font-medium text-gray-700 mb-2">Property Types</label>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-<label class="flex items-center gap-2">
-<input type="checkbox" value="single_family" class="rounded text-yellow-500">
-<span>Single Family</span>
-</label>
-<label class="flex items-center gap-2">
-<input type="checkbox" value="duplex" class="rounded text-yellow-500">
-<span>Duplex</span>
-</label>
-<label class="flex items-center gap-2">
-<input type="checkbox" value="triplex" class="rounded text-yellow-500">
-<span>Triplex</span>
-</label>
-<label class="flex items-center gap-2">
-<input type="checkbox" value="fourplex" class="rounded text-yellow-500">
-<span>Fourplex</span>
-</label>
-</div>
-</div>
-<button type="submit" class="w-full navy-bg text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-800 transition">
-Join Buyer List
-</button>
-</form>
-<div id="buyerSuccess" class="hidden mt-6 p-4 bg-green-500/20 border border-green-500 rounded-lg text-center">
-<p class="text-green-700 font-bold">✓ Added! You'll receive deal alerts matching your criteria.</p>
-</div>
-</div>
-</section>
 
 <!-- Footer -->
-<footer class="navy-bg text-white py-12">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-<div class="grid md:grid-cols-3 gap-8">
-<div>
-<div class="flex items-center gap-3 mb-4">
-<div class="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center">
-<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-</div>
-<span class="text-lg font-bold">AEGIS CAPITAL</span>
-</div>
-<p class="text-gray-300">Off-market real estate deals for institutional buyers. Texas and nationwide.</p>
-</div>
-<div>
-<h4 class="font-bold mb-4">Quick Links</h4>
-<ul class="space-y-2 text-gray-300">
-<li><a href="#seller" class="hover:text-yellow-400">Sell Your Property</a></li>
-<li><a href="#buyer" class="hover:text-yellow-400">Join Buyer List</a></li>
-<li><a href="mailto:deals@aegis-capital.com" class="hover:text-yellow-400">Contact Us</a></li>
-</ul>
-</div>
-<div>
-<h4 class="font-bold mb-4">Contact</h4>
-<p class="text-gray-300">Email: deals@aegis-capital.com</p>
-<p class="text-gray-300 mt-2">Operating in: Texas, Florida, Georgia</p>
+<div class="navy py-8 px-4 mt-8">
+<div class="max-w-7xl mx-auto text-center">
+<div class="text-2xl font-bold mb-2">AEGIS CAPITAL</div>
+<div class="text-gray-400 text-sm mb-4">Protected Profits. Powerful Deals.</div>
+<div class="text-gray-500 text-xs">
+Project p_1778324230_fd9650 | $0 Cost | 10 States | 50+ Buyers | $90K+/month potential
 </div>
 </div>
-<div class="mt-8 pt-8 border-t border-white/20 text-center text-gray-400 text-sm">
-© 2026 Aegis Capital. All rights reserved. This is not an offer to sell securities.
 </div>
-</div>
-</footer>
-
-<script>
-// Form handlers — store in localStorage for now
-// Later: integrate with Google Sheets or backend
-
-document.getElementById('sellerForm').addEventListener('submit', function(e) {
-e.preventDefault();
-const data = {
-type: 'seller',
-address: document.getElementById('address').value,
-name: document.getElementById('name').value,
-phone: document.getElementById('phone').value,
-email: document.getElementById('email').value,
-condition: document.getElementById('condition').value,
-timeline: document.getElementById('timeline').value,
-notes: document.getElementById('notes').value,
-date: new Date().toISOString()
-};
-const leads = JSON.parse(localStorage.getItem('aegis_leads') || '[]');
-leads.push(data);
-localStorage.setItem('aegis_leads', JSON.stringify(leads));
-document.getElementById('formSuccess').classList.remove('hidden');
-this.reset();
-});
-
-document.getElementById('buyerForm').addEventListener('submit', function(e) {
-e.preventDefault();
-const data = {
-type: 'buyer',
-company: document.getElementById('company').value,
-name: document.getElementById('buyerName').value,
-email: document.getElementById('buyerEmail').value,
-phone: document.getElementById('buyerPhone').value,
-minPrice: document.getElementById('minPrice').value,
-maxPrice: document.getElementById('maxPrice').value,
-markets: document.getElementById('markets').value,
-date: new Date().toISOString()
-};
-const buyers = JSON.parse(localStorage.getItem('aegis_buyers') || '[]');
-buyers.push(data);
-localStorage.setItem('aegis_buyers', JSON.stringify(buyers));
-document.getElementById('buyerSuccess').classList.remove('hidden');
-this.reset();
-});
-</script>
 
 </body>
 </html>
