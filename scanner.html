@@ -87,72 +87,132 @@ body { font-family: 'Inter', sans-serif; background: #FFF8F0; }
 </div>
 
 <script>
-// Simulated scan — in production, this would hit APIs
+const API = 'http://localhost:5001';
+
+// Houston-specific sample leads for each scan type
 const SOURCES = {
 preforeclosure: [
-{ address: "4521 Oak Ridge Dr, Houston, TX 77021", motivation: "high", type: "Pre-foreclosure", note: "Notice of default filed. Auction scheduled 45 days.", price: "$145K", arv: "$220K" },
-{ address: "8912 Pine Forest Ln, Dallas, TX 75217", motivation: "high", type: "Pre-foreclosure", note: "3 months behind. Bank filed foreclosure.", price: "$89K", arv: "$155K" },
-{ address: "2234 Cedar Brook Rd, Austin, TX 78744", motivation: "high", type: "Pre-foreclosure", note: "Divorce + foreclosure. Motivated.", price: "$195K", arv: "$310K" }
+  { address: "4521 Oak Ridge Dr, Houston, TX 77021", city: "Houston", zip: "77021", motivation: "Pre-foreclosure", motivLevel: "high", condition: "C4", beds: 3, baths: 2, sqft: 1450, arv: 385000, asking: 215000, note: "Notice of default filed. Auction ~45 days. Owner lives out of state." },
+  { address: "7823 Fallbrook Dr, Houston, TX 77086", city: "Houston", zip: "77086", motivation: "Pre-foreclosure", motivLevel: "high", condition: "C5", beds: 4, baths: 2, sqft: 1870, arv: 410000, asking: 228000, note: "3 months behind. Bank filed. Seller wants to avoid auction." },
+  { address: "2234 Cypress Creek Pkwy, Cypress, TX 77429", city: "Cypress", zip: "77429", motivation: "Pre-foreclosure", motivLevel: "high", condition: "C3", beds: 4, baths: 2.5, sqft: 2100, arv: 420000, asking: 262000, note: "Divorce + foreclosure. Both parties agree to sell." }
 ],
 taxdelinquent: [
-{ address: "1105 Magnolia Ave, San Antonio, TX 78206", motivation: "high", type: "Tax Delinquent", note: "3 years delinquent. $12K owed. County auction in 60 days.", price: "$75K", arv: "$140K" },
-{ address: "6742 Elm Street, Fort Worth, TX 76104", motivation: "med", type: "Tax Delinquent", note: "2 years delinquent. $8K owed.", price: "$110K", arv: "$185K" }
+  { address: "9105 Chimney Rock Rd, Houston, TX 77096", city: "Houston", zip: "77096", motivation: "Tax delinquent", motivLevel: "high", condition: "C5", beds: 3, baths: 2, sqft: 1580, arv: 375000, asking: 195000, note: "3 years delinquent. $18K owed. County auction in 60 days." },
+  { address: "6742 Beechnut St, Houston, TX 77074", city: "Houston", zip: "77074", motivation: "Tax delinquent", motivLevel: "high", condition: "C4", beds: 3, baths: 1.5, sqft: 1320, arv: 355000, asking: 185000, note: "2 years delinquent. $11K owed. Elderly owner." },
+  { address: "14203 Bammel North Houston Rd, Houston, TX 77066", city: "Houston", zip: "77066", motivation: "Tax delinquent", motivLevel: "med", condition: "C3", beds: 4, baths: 2, sqft: 1940, arv: 400000, asking: 248000, note: "1 year delinquent. Moving to assisted living." }
 ],
 absentee: [
-{ address: "3301 River Oaks Blvd, Houston, TX 77019", motivation: "med", type: "Absentee Owner", note: "Owner in California. Tired landlord. Long-term tenant.", price: "$320K", arv: "$450K" },
-{ address: "5550 Legacy Dr, Plano, TX 75024", motivation: "low", type: "Absentee Owner", note: "Owner in New York. Inherited property.", price: "$275K", arv: "$380K" }
+  { address: "3301 Weslayan St, Houston, TX 77027", city: "Houston", zip: "77027", motivation: "Absentee owner / tired landlord", motivLevel: "med", condition: "C4", beds: 3, baths: 2, sqft: 1650, arv: 435000, asking: 278000, note: "Owner in California. Tenant not paying. Tired landlord." },
+  { address: "5502 Westcreek Dr, Houston, TX 77035", city: "Houston", zip: "77035", motivation: "Absentee owner / inherited", motivLevel: "med", condition: "C3", beds: 4, baths: 2, sqft: 1780, arv: 390000, asking: 250000, note: "Owner inherited. Lives in Dallas. Wants quick sale." },
+  { address: "18905 Kuykendahl Rd, Spring, TX 77379", city: "Spring", zip: "77379", motivation: "Absentee owner", motivLevel: "low", condition: "C2", beds: 4, baths: 2.5, sqft: 2300, arv: 415000, asking: 280000, note: "Owner in New York. Long-term rental, lease ending." }
 ]
 };
 
+let scannedLeads = []; // holds current scan results
+
 function runScan(type) {
-const leads = SOURCES[type] || [];
-const container = document.getElementById('leadsContainer');
-const existing = JSON.parse(localStorage.getItem('aegis_leads') || '[]');
+  const leads = SOURCES[type] || [];
+  scannedLeads = leads;
+  const container = document.getElementById('leadsContainer');
 
-let html = '<div class="overflow-x-auto"><table class="w-full text-left">';
-html += '<thead class="bg-gray-50"><tr><th class="p-3">Property</th><th class="p-3">Type</th><th class="p-3">Motivation</th><th class="p-3">Price / ARV</th><th class="p-3">Note</th><th class="p-3">Action</th></tr></thead><tbody>';
+  let html = '<div class="overflow-x-auto"><table class="w-full text-left">';
+  html += '<thead class="bg-gray-50"><tr><th class="p-3">Property</th><th class="p-3">ARV</th><th class="p-3">Asking</th><th class="p-3">Spread</th><th class="p-3">Motivation</th><th class="p-3">Note</th><th class="p-3">Action</th></tr></thead><tbody>';
 
-leads.forEach((lead, idx) => {
-const motivationClass = lead.motivation === 'high' ? 'motivation-high' : lead.motivation === 'med' ? 'motivation-med' : 'motivation-low';
-html += `<tr class="border-b">
-<td class="p-3 font-medium">${lead.address}</td>
-<td class="p-3">${lead.type}</td>
-<td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${motivationClass}">${lead.motivation.toUpperCase()}</span></td>
-<td class="p-3">${lead.price} / ${lead.arv}</td>
-<td class="p-3 text-sm text-gray-600">${lead.note}</td>
-<td class="p-3"><button onclick="saveLead('${lead.type}', '${lead.address}', '${lead.motivation}', '${lead.price}', '${lead.arv}')" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">Save</button></td>
-</tr>`;
-});
+  leads.forEach((lead, idx) => {
+    const mao = Math.round(lead.arv * 0.70 - 25000); // estimate repairs
+    const spread = lead.arv - lead.asking;
+    const spreadColor = spread > 100000 ? 'color:green;font-weight:bold' : spread > 50000 ? 'color:orange' : 'color:#999';
+    const motivationClass = lead.motivLevel === 'high' ? 'motivation-high' : lead.motivLevel === 'med' ? 'motivation-med' : 'motivation-low';
+    html += `<tr class="border-b">
+      <td class="p-3 font-medium" style="min-width:180px">${lead.address}</td>
+      <td class="p-3">$${(lead.arv/1000).toFixed(0)}K</td>
+      <td class="p-3">$${(lead.asking/1000).toFixed(0)}K</td>
+      <td class="p-3" style="${spreadColor}">+$${(spread/1000).toFixed(0)}K</td>
+      <td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${motivationClass}">${lead.motivLevel.toUpperCase()}</span></td>
+      <td class="p-3 text-sm text-gray-600" style="max-width:220px">${lead.note}</td>
+      <td class="p-3">
+        <button onclick="saveLeadToAPI(${idx})" id="save-btn-${idx}"
+          class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">Save →</button>
+      </td>
+    </tr>`;
+  });
 
-html += '</tbody></table></div>';
-container.innerHTML = html;
+  html += '</tbody></table></div>';
+  container.innerHTML = html;
+  document.getElementById('lastScan').textContent = new Date().toLocaleString();
+  document.getElementById('todayLeads').textContent = leads.length;
 
-// Update stats
-document.getElementById('lastScan').textContent = new Date().toLocaleString();
-document.getElementById('todayLeads').textContent = leads.length;
-
-// Save to CRM
-leads.forEach(lead => {
-existing.push({
-...lead,
-date: new Date().toISOString(),
-status: 'new',
-source: type
-});
-});
-localStorage.setItem('aegis_leads', JSON.stringify(existing));
+  // Load today's real leads from DB too
+  loadRealLeads();
 }
 
-function saveLead(type, address, motivation, price, arv) {
-const leads = JSON.parse(localStorage.getItem('aegis_leads') || '[]');
-leads.push({
-type, address, motivation, price, arv,
-date: new Date().toISOString(),
-status: 'new',
-source: 'manual'
-});
-localStorage.setItem('aegis_leads', JSON.stringify(leads));
-alert('Lead saved to CRM!');
+async function saveLeadToAPI(idx) {
+  const lead = scannedLeads[idx];
+  const btn = document.getElementById(`save-btn-${idx}`);
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
+  // Parse asking price number
+  const arvNum = lead.arv || 0;
+  const askNum = lead.asking || 0;
+  const repairs = Math.round(arvNum * 0.15); // rough estimate
+  const mao = Math.round(arvNum * 0.70 - repairs);
+
+  const payload = {
+    address: lead.address,
+    city: lead.city || 'Houston',
+    state: 'TX',
+    zip: lead.zip || '',
+    beds: lead.beds || null,
+    baths: lead.baths || null,
+    sqft: lead.sqft || null,
+    condition: lead.condition || 'C4',
+    arv: arvNum,
+    repair_estimate: repairs,
+    mao: mao,
+    asking_price: askNum,
+    assignment_fee: Math.round(askNum - mao > 0 ? askNum - mao : 15000),
+    status: 'lead',
+    source: 'Scanner',
+    motivation: lead.motivation || 'Unknown',
+    notes: lead.note || ''
+  };
+
+  try {
+    const resp = await fetch(`${API}/api/properties`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      btn.textContent = '✓ Saved';
+      btn.classList.replace('bg-green-600', 'bg-gray-400');
+      // Log to deal_logs
+      console.log(`Saved to DB as ID ${data.id}`);
+    } else {
+      throw new Error('API error');
+    }
+  } catch(e) {
+    // Fallback: save offline
+    const offline = JSON.parse(localStorage.getItem('aegis_offline_leads') || '[]');
+    offline.push({ ...payload, saved_at: new Date().toISOString() });
+    localStorage.setItem('aegis_offline_leads', JSON.stringify(offline));
+    btn.textContent = '📴 Offline';
+    btn.style.background = '#888';
+    console.warn('API unreachable — saved offline. Will sync when server starts.');
+  }
+}
+
+async function loadRealLeads() {
+  try {
+    const resp = await fetch(`${API}/api/properties?active=1`);
+    const props = await resp.json();
+    if (!props || !props.length) return;
+    const counter = document.getElementById('todayLeads');
+    const cur = parseInt(counter.textContent) || 0;
+    counter.textContent = cur + ' (+ ' + props.length + ' in DB)';
+  } catch {}
 }
 
 function copyScript(btn) {

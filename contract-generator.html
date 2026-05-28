@@ -113,80 +113,138 @@
 
 <script>
 function generatePA() {
-const address = document.getElementById('pa_address').value;
+const address = document.getElementById('pa_address').value.trim();
 const price = document.getElementById('pa_price').value;
-const seller = document.getElementById('pa_seller').value;
-const buyer = document.getElementById('pa_buyer').value;
-const date = document.getElementById('pa_date').value;
+const seller = document.getElementById('pa_seller').value.trim();
+const buyer = document.getElementById('pa_buyer').value.trim();
+const closeDate = document.getElementById('pa_date').value;
 const state = document.getElementById('pa_state').value;
-const provisions = document.getElementById('pa_provisions').value;
+const provisions = document.getElementById('pa_provisions').value.trim();
+const earnest = document.getElementById('pa_earnest') ? document.getElementById('pa_earnest').value : '500';
+const optionFee = document.getElementById('pa_option') ? document.getElementById('pa_option').value : '100';
 
-if (!address || !price || !seller || !buyer || !date) {
-alert('Fill in all fields first');
-return;
+if (!address || !price || !seller || !buyer || !closeDate) {
+  alert('Please fill in all required fields.');
+  return;
 }
 
-const contract = `REAL ESTATE PURCHASE AGREEMENT
+const priceNum = parseInt(price);
+const today = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+const closeFmt = new Date(closeDate + 'T12:00:00').toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+const cityStateZip = address.includes(',') ? address.split(',').slice(1).join(',').trim() : state;
+const streetAddr = address.split(',')[0];
 
-Date: ${date}
-State: ${state}
+const isTX = state === 'TX';
 
-PROPERTY:
-${address}
+const contractHTML = `
+<div style="font-family:'Times New Roman',Times,serif;font-size:12pt;line-height:1.7;color:#000;max-width:680px;margin:0 auto;padding:40px 32px;">
 
-SELLER:
-${seller}
+  <div style="text-align:center;margin-bottom:24px;">
+    <div style="font-size:8pt;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:6px;">Aegis Capital RE · Houston, TX</div>
+    <h1 style="font-size:15pt;font-weight:bold;letter-spacing:0.5px;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:4px;">
+      REAL ESTATE PURCHASE AND SALE AGREEMENT
+    </h1>
+    ${isTX ? '<div style="font-size:9pt;color:#555;margin-top:4px;">Texas Wholesale Assignment Contract · For and In Consideration of the Covenants Herein</div>' : ''}
+  </div>
 
-BUYER:
-${buyer} ("Buyer") 
+  <p><strong>Effective Date:</strong> ${today}</p>
+  <p><strong>Anticipated Closing:</strong> On or before ${closeFmt}</p>
 
-TERMS:
-1. PURCHASE PRICE: $${parseInt(price).toLocaleString()} ("Purchase Price")
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">1. PARTIES</h2>
+  <p><strong>SELLER:</strong> ${seller}, hereinafter referred to as "Seller."</p>
+  <p><strong>BUYER:</strong> ${buyer}, and/or Assigns, hereinafter referred to as "Buyer."</p>
 
-2. EARNEST MONEY: $500 due within 3 days of execution
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">2. PROPERTY</h2>
+  <p>Seller agrees to sell, and Buyer agrees to buy, the real property located at:</p>
+  <p style="margin-left:24px;font-weight:bold;">${address}</p>
+  <p>including all improvements, fixtures, and appurtenances thereto, hereinafter the "Property."</p>
 
-3. INSPECTION PERIOD: 10 days
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">3. PURCHASE PRICE & TERMS</h2>
+  <p>The total purchase price is <strong>$${priceNum.toLocaleString()}</strong> ("Purchase Price"), payable as follows:</p>
+  <p style="margin-left:24px;">a. Earnest Money Deposit of <strong>$${parseInt(earnest||500).toLocaleString()}</strong> delivered to Title Company within three (3) business days of execution;</p>
+  ${isTX ? `<p style="margin-left:24px;">b. Option Fee of <strong>$${parseInt(optionFee||100).toLocaleString()}</strong> paid directly to Seller at execution, granting Buyer the unrestricted right to terminate during the Option Period;</p>` : ''}
+  <p style="margin-left:24px;">${isTX ? 'c' : 'b'}. Balance of Purchase Price payable at closing via cash, wire transfer, or certified funds.</p>
 
-4. CLOSING DATE: ${date}
+  ${isTX ? `
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">4. OPTION PERIOD (Texas-Specific)</h2>
+  <p>Buyer shall have an unrestricted right to terminate this contract for any reason within <strong>10 days</strong> of the Effective Date ("Option Period"). This right is granted in consideration of the Option Fee paid above, which is non-refundable but credited toward the Purchase Price at closing.</p>
+  ` : `
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">4. INSPECTION PERIOD</h2>
+  <p>Buyer shall have <strong>10 days</strong> from the Effective Date to inspect the Property and, at Buyer's sole discretion, terminate this agreement.</p>
+  `}
 
-5. PROPERTY CONDITION: Sold AS-IS. Seller makes no warranties.
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">5. PROPERTY CONDITION — AS-IS SALE</h2>
+  <p>Property is sold strictly <strong>"AS-IS, WHERE-IS"</strong> in its present condition. Seller makes no warranties, express or implied, as to the condition, habitability, or fitness for any purpose. Buyer has had or has waived the right to conduct inspections. Seller is not required to make any repairs.</p>
 
-6. ASSIGNMENT: ${provisions}
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">6. ASSIGNMENT — BUYER'S RIGHT TO ASSIGN</h2>
+  <p><strong>Buyer expressly reserves the right to assign this contract</strong> to any third party ("Assignee") at any time prior to closing. Seller acknowledges and consents to such assignment. Buyer's liability terminates upon assignment if Assignee assumes all obligations hereunder. Buyer may profit from such assignment and Seller acknowledges awareness of this.</p>
+  <p style="background:#fffbe6;border-left:4px solid #C9A227;padding:8px 12px;border-radius:0 4px 4px 0;font-size:10pt;">
+    <strong>SELLER DISCLOSURE:</strong> Seller acknowledges that Buyer is a real estate investor who may assign or sell Buyer's equitable interest in this contract at a price higher than the Purchase Price herein. This is a lawful wholesale real estate transaction.
+  </p>
 
-7. GOVERNING LAW: This agreement governed by ${state} law.
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">7. TITLE & CLOSING</h2>
+  <p>Seller shall convey marketable fee simple title by General Warranty Deed, free and clear of all liens, encumbrances, and claims except those of record acceptable to Buyer. Closing shall occur at a licensed title company mutually agreed upon. Closing costs shall be split equally unless otherwise negotiated. Seller shall provide clear title and pay off all outstanding mortgages, liens, and taxes at or before closing from proceeds.</p>
 
-DISCLOSURE:
-Buyer is a real estate investor acquiring equitable interest in this 
-property. Buyer may assign this contract to a third party. This is not 
-a real estate brokerage transaction. Buyer is not a licensed real estate 
-agent.
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">8. DEFAULT</h2>
+  <p>If Seller defaults, Buyer may seek specific performance or terminate and recover Earnest Money. If Buyer defaults after the Option Period, Seller's sole remedy is retention of the Earnest Money as liquidated damages, and this contract shall be null and void.</p>
 
-SIGNATURES:
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">9. ADDITIONAL PROVISIONS</h2>
+  <p>${provisions || 'None. Standard terms apply.'}</p>
 
-_______________________________
-${seller} (Seller)
-Date: _______________
+  ${isTX ? `
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">10. TEXAS INVESTOR DISCLOSURE</h2>
+  <p style="font-size:10pt;">Pursuant to Texas Property Code §5.086 and the Texas Real Estate License Act, Buyer discloses that: (i) Buyer is purchasing the Property as a principal investor and not as a licensed real estate agent or broker; (ii) Buyer may assign equitable interest in this contract; (iii) this transaction is a wholesale real estate purchase and Buyer may realize a profit on assignment; (iv) Seller has the right to consult with an attorney or a licensed real estate agent prior to executing this agreement.</p>
+  ` : ''}
 
-_______________________________
-${buyer} (Buyer)
-Date: _______________
-`;
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">${isTX ? '11' : '10'}. GOVERNING LAW</h2>
+  <p>This Agreement shall be governed by the laws of the State of ${state === 'TX' ? 'Texas' : state}. Any disputes shall be resolved in the county where the Property is located.</p>
 
-document.getElementById('contractContent').textContent = contract;
+  <h2 style="font-size:11pt;margin-top:20px;border-bottom:1px solid #ccc;padding-bottom:4px;">${isTX ? '12' : '11'}. ENTIRE AGREEMENT</h2>
+  <p>This Agreement constitutes the entire agreement between the parties and supersedes all prior negotiations. Modifications must be in writing and signed by all parties.</p>
+
+  <div style="margin-top:40px;border-top:2px solid #000;padding-top:24px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+      <div>
+        <p style="font-weight:bold;margin-bottom:4px;">SELLER</p>
+        <div style="border-bottom:1px solid #000;min-height:40px;margin-bottom:6px;" id="seller-sig-line"></div>
+        <p style="font-size:10pt;">${seller}</p>
+        <p style="font-size:10pt;">Date: ___________________</p>
+      </div>
+      <div>
+        <p style="font-weight:bold;margin-bottom:4px;">BUYER</p>
+        <div style="border-bottom:1px solid #000;min-height:40px;margin-bottom:6px;" id="buyer-sig-line"></div>
+        <p style="font-size:10pt;">${buyer}, and/or Assigns</p>
+        <p style="font-size:10pt;">Date: ___________________</p>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;font-size:9pt;color:#666;border-top:1px solid #eee;padding-top:12px;">
+      <strong>NOTE:</strong> This document is a template for educational and informational purposes. Consult a licensed Texas real estate attorney before using in a live transaction. Aegis Capital RE makes no representations as to the legal sufficiency of this document in any specific jurisdiction.
+    </div>
+  </div>
+
+</div>`;
+
+document.getElementById('contractContent').innerHTML = contractHTML;
 document.getElementById('contractPreview').classList.remove('hidden');
 document.getElementById('esignArea').classList.remove('hidden');
 document.getElementById('sig_seller').value = seller;
 document.getElementById('sig_buyer').value = buyer;
+window.scrollTo({ top: document.getElementById('contractPreview').offsetTop - 20, behavior: 'smooth' });
 }
 
 function downloadPDF() {
-const content = document.getElementById('contractContent').textContent;
-const blob = new Blob([content], { type: 'text/plain' });
-const url = URL.createObjectURL(blob);
-const a = document.createElement('a');
-a.href = url;
-a.download = 'purchase-agreement.txt';
-a.click();
+  // Use browser print-to-PDF — most reliable cross-platform
+  const content = document.getElementById('contractContent').innerHTML;
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head>
+    <title>Purchase Agreement — Aegis Capital RE</title>
+    <style>
+      @media print { body { margin: 0; } }
+      body { font-family:'Times New Roman',Times,serif; }
+    </style>
+  </head><body>${content}<script>window.onload=function(){window.print();}<\/script></body></html>`);
+  win.document.close();
 }
 
 function sendForSignature() {

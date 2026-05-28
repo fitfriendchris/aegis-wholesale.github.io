@@ -1,0 +1,28 @@
+🏛️ Aegis Capital API Server
+========================================
+Endpoints:
+  GET  /api/properties
+  GET  /api/properties?arv_min=350000&arv_max=450000&active=1
+  GET  /api/pipeline/summary
+  GET  /api/pipeline/filter?arv_min=350000&arv_max=450000
+  GET  /api/match/<property_id>
+========================================
+ * Serving Flask app 'api_server'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.2:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 225-691-809
+127.0.0.1 - - [23/May/2026 17:53:10] "GET /api/health HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 17:53:17] "GET /api/pipeline/filter?arv_min=350000&arv_max=450000 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 17:53:17] "GET /api/pipeline/summary HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 17:53:21] "GET /api/pipeline/summary HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 17:53:21] "GET /api/pipeline/filter?arv_min=350000&arv_max=450000 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 17:53:25] "GET /api/pipeline/filter?arv_min=350000&arv_max=450000 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 17:53:38] "GET /api/pipeline/filter?arv_min=350000&arv_max=450000 HTTP/1.1" 200 -
+/usr/local/Cellar/python@3.14/3.14.4_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-f6z32g1k'}
+  warnings.warn(

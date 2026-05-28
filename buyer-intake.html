@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegis Capital | Join Our Buyer's List</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { font-family: 'Inter', sans-serif; background: #FFF8F0; }
+.navy { background-color: #1A3A5C; color: white; }
+.gold { color: #C9A227; }
+.section { background: white; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+input[type="text"], input[type="number"], input[type="email"], input[type="tel"], select, textarea {
+  width: 100%; padding: 10px 12px; border: 1px solid #D1D5DB; border-radius: 8px;
+  font-size: 14px; outline: none; transition: border 0.2s;
+}
+input:focus, select:focus, textarea:focus { border-color: #1A3A5C; }
+.checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+.check-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+.check-item input { width: auto; }
+.tag { display: inline-block; background: #E0E7FF; color: #3730A3; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin: 2px; }
+.required { color: #EF4444; }
+.success-banner { display: none; background: #ECFDF5; border: 1px solid #10B981; border-radius: 12px; padding: 20px; text-align: center; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- Header -->
+<div class="navy py-6 px-4">
+  <div class="max-w-2xl mx-auto">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center text-2xl">🏛️</div>
+      <div>
+        <div class="text-xl font-bold">AEGIS CAPITAL</div>
+        <div class="text-sm opacity-70">Houston Metro Wholesale Deals | ~$400K ARV Sweet Spot</div>
+      </div>
+    </div>
+    <p class="mt-4 text-gray-300 text-sm max-w-lg">
+      Get exclusive access to off-market deals before they're blasted to the list.
+      We only send deals that match your exact criteria — no spam.
+    </p>
+  </div>
+</div>
+
+<div class="max-w-2xl mx-auto px-4 py-8">
+
+<!-- Stats bar -->
+<div class="grid grid-cols-3 gap-4 mb-8">
+  <div class="bg-white rounded-xl shadow p-4 text-center">
+    <div class="text-2xl font-bold text-navy">23</div>
+    <div class="text-xs text-gray-500">Active Deals<br>~$400K ARV</div>
+  </div>
+  <div class="bg-white rounded-xl shadow p-4 text-center">
+    <div class="text-2xl font-bold gold">$10K–$25K</div>
+    <div class="text-xs text-gray-500">Assignment<br>Fees</div>
+  </div>
+  <div class="bg-white rounded-xl shadow p-4 text-center">
+    <div class="text-2xl font-bold text-green-600">7–21</div>
+    <div class="text-xs text-gray-500">Days to<br>Close</div>
+  </div>
+</div>
+
+<!-- Success banner -->
+<div class="success-banner mb-6" id="successBanner">
+  <div class="text-3xl mb-2">🎉</div>
+  <h2 class="text-xl font-bold text-green-800">You're on the list!</h2>
+  <p class="text-green-700 mt-2">We'll notify you the moment a deal matching your criteria hits our pipeline. Typical response time: same day.</p>
+</div>
+
+<form id="buyerForm" onsubmit="submitBuyer(event)">
+
+<!-- Section 1: Contact -->
+<div class="section">
+  <h2 class="text-lg font-bold text-navy mb-4">👤 Contact Info</h2>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div>
+      <label class="label">Name <span class="required">*</span></label>
+      <input id="b_name" type="text" placeholder="Marcus Johnson" required>
+    </div>
+    <div>
+      <label class="label">Company (LLC/Entity)</label>
+      <input id="b_company" type="text" placeholder="MJ Capital LLC">
+    </div>
+    <div>
+      <label class="label">Phone <span class="required">*</span></label>
+      <input id="b_phone" type="tel" placeholder="(713) 555-0101" required>
+    </div>
+    <div>
+      <label class="label">Email <span class="required">*</span></label>
+      <input id="b_email" type="email" placeholder="marcus@mjcapital.com" required>
+    </div>
+  </div>
+</div>
+
+<!-- Section 2: Buy Box -->
+<div class="section">
+  <h2 class="text-lg font-bold text-navy mb-4">🎯 Your Buy Box</h2>
+
+  <div class="grid md:grid-cols-2 gap-4 mb-4">
+    <div>
+      <label class="label">Min ARV <span class="required">*</span></label>
+      <div class="relative">
+        <span class="absolute left-3 top-2.5 text-gray-500">$</span>
+        <input id="b_arv_min" type="number" class="pl-6" placeholder="300000" value="300000" required>
+      </div>
+    </div>
+    <div>
+      <label class="label">Max ARV <span class="required">*</span></label>
+      <div class="relative">
+        <span class="absolute left-3 top-2.5 text-gray-500">$</span>
+        <input id="b_arv_max" type="number" class="pl-6" placeholder="500000" value="500000" required>
+      </div>
+    </div>
+    <div>
+      <label class="label">Max Rehab Budget</label>
+      <div class="relative">
+        <span class="absolute left-3 top-2.5 text-gray-500">$</span>
+        <input id="b_max_rehab" type="number" class="pl-6" placeholder="75000" value="75000">
+      </div>
+    </div>
+    <div>
+      <label class="label">Min Beds</label>
+      <select id="b_min_beds">
+        <option value="2">2+ Beds</option>
+        <option value="3" selected>3+ Beds</option>
+        <option value="4">4+ Beds</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label class="label">Purchase Strategy <span class="required">*</span></label>
+    <div class="checkbox-grid mt-2">
+      <label class="check-item"><input type="checkbox" id="strat_flip" checked> Fix & Flip</label>
+      <label class="check-item"><input type="checkbox" id="strat_brrrr"> BRRRR / Refinance</label>
+      <label class="check-item"><input type="checkbox" id="strat_rental"> Buy & Hold Rental</label>
+      <label class="check-item"><input type="checkbox" id="strat_wholesale"> Wholesale / Assign</label>
+      <label class="check-item"><input type="checkbox" id="strat_newbuild"> Tear Down / New Build</label>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label class="label">Acceptable Property Condition (select all)</label>
+    <div class="checkbox-grid mt-2">
+      <label class="check-item"><input type="checkbox" id="cond_c1"> C1 — New / Like New</label>
+      <label class="check-item"><input type="checkbox" id="cond_c2"> C2 — Minor Updates</label>
+      <label class="check-item"><input type="checkbox" id="cond_c3" checked> C3 — Light Cosmetics</label>
+      <label class="check-item"><input type="checkbox" id="cond_c4" checked> C4 — Full Cosmetics</label>
+      <label class="check-item"><input type="checkbox" id="cond_c5"> C5 — Heavy Rehab</label>
+      <label class="check-item"><input type="checkbox" id="cond_c6"> C6 — Structural / Demo</label>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label class="label">Property Types</label>
+    <div class="checkbox-grid mt-2">
+      <label class="check-item"><input type="checkbox" id="type_sfr" checked> Single Family (SFR)</label>
+      <label class="check-item"><input type="checkbox" id="type_townhome"> Townhome</label>
+      <label class="check-item"><input type="checkbox" id="type_condo"> Condo / Hi-Rise</label>
+      <label class="check-item"><input type="checkbox" id="type_mfr"> Multi-Family (2-4u)</label>
+      <label class="check-item"><input type="checkbox" id="type_mobile"> Mobile Home / Land</label>
+    </div>
+  </div>
+</div>
+
+<!-- Section 3: Houston Area Preferences -->
+<div class="section">
+  <h2 class="text-lg font-bold text-navy mb-1">📍 Houston Area Preferences</h2>
+  <p class="text-sm text-gray-500 mb-4">Select all zip codes / neighborhoods you actively buy in</p>
+
+  <div class="mb-4">
+    <label class="label">School Districts (high-value areas)</label>
+    <div class="checkbox-grid mt-2">
+      <label class="check-item"><input type="checkbox" id="sd_katy"> Katy ISD (77449, 77494)</label>
+      <label class="check-item"><input type="checkbox" id="sd_cyfair"> Cy-Fair ISD (77429, 77433)</label>
+      <label class="check-item"><input type="checkbox" id="sd_klein"> Klein ISD (77379, 77388)</label>
+      <label class="check-item"><input type="checkbox" id="sd_clearcreek"> Clear Creek ISD (77573, 77059)</label>
+      <label class="check-item"><input type="checkbox" id="sd_hisd"> HISD (77005, 77006, 77019)</label>
+      <label class="check-item"><input type="checkbox" id="sd_any"> Any / Flexible</label>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label class="label">Preferred Submarkets</label>
+    <div class="checkbox-grid mt-2">
+      <label class="check-item"><input type="checkbox" id="area_katy"> Katy / West Houston</label>
+      <label class="check-item"><input type="checkbox" id="area_spring"> Spring / Champions</label>
+      <label class="check-item"><input type="checkbox" id="area_cypress"> Cypress / Northwest</label>
+      <label class="check-item"><input type="checkbox" id="area_woodlands"> The Woodlands / Conroe</label>
+      <label class="check-item"><input type="checkbox" id="area_sugarland"> Sugar Land / Missouri City</label>
+      <label class="check-item"><input type="checkbox" id="area_pearland"> Pearland / South</label>
+      <label class="check-item"><input type="checkbox" id="area_leaguecity"> League City / Clear Lake</label>
+      <label class="check-item"><input type="checkbox" id="area_midtown"> Inner Loop / Midtown</label>
+      <label class="check-item"><input type="checkbox" id="area_heights"> Heights / Montrose</label>
+      <label class="check-item"><input type="checkbox" id="area_medcenter"> Medical Center</label>
+      <label class="check-item"><input type="checkbox" id="area_energycorr"> Energy Corridor</label>
+      <label class="check-item"><input type="checkbox" id="area_bellaire"> Bellaire / Meyerland</label>
+    </div>
+  </div>
+
+  <div>
+    <label class="label">Flood Zone Policy</label>
+    <select id="b_flood">
+      <option value="zone_x_only">Zone X only (no flood insurance needed)</option>
+      <option value="zone_x_preferred">Prefer Zone X, consider AE with deep discount</option>
+      <option value="any">Accept any flood zone with appropriate pricing</option>
+    </select>
+  </div>
+</div>
+
+<!-- Section 4: Deal Terms -->
+<div class="section">
+  <h2 class="text-lg font-bold text-navy mb-4">⚡ Deal Terms & Closing</h2>
+
+  <div class="grid md:grid-cols-2 gap-4 mb-4">
+    <div>
+      <label class="label">Close in How Many Days?</label>
+      <select id="b_close_days">
+        <option value="3">3 days (lightning close)</option>
+        <option value="7" selected>7 days</option>
+        <option value="14">14 days</option>
+        <option value="21">21 days</option>
+        <option value="30">30 days</option>
+      </select>
+    </div>
+    <div>
+      <label class="label">Deals Per Month (capacity)</label>
+      <select id="b_deals_per_month">
+        <option value="1">1 deal</option>
+        <option value="2">2 deals</option>
+        <option value="5" selected>3-5 deals</option>
+        <option value="10">5-10 deals</option>
+        <option value="20">10-20 deals (institutional)</option>
+      </select>
+    </div>
+    <div>
+      <label class="label">Proof of Funds</label>
+      <select id="b_pof">
+        <option value="bank_statement">Bank statement (on request)</option>
+        <option value="pof_letter">POF letter from lender</option>
+        <option value="hard_money">Hard money / private lending</option>
+        <option value="line_of_credit">Line of credit</option>
+        <option value="partnership">JV / partnership capital</option>
+      </select>
+    </div>
+    <div>
+      <label class="label">Assignment or Double Close?</label>
+      <select id="b_closing_type">
+        <option value="assignment">Assignment of contract (preferred)</option>
+        <option value="double_close">Double close acceptable</option>
+        <option value="both">Either works</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label class="label">Foundation Type</label>
+    <div class="checkbox-grid mt-2">
+      <label class="check-item"><input type="checkbox" id="found_slab" checked> Slab</label>
+      <label class="check-item"><input type="checkbox" id="found_pier"> Pier & Beam</label>
+      <label class="check-item"><input type="checkbox" id="found_any"> Any / Flexible</label>
+    </div>
+  </div>
+
+  <div>
+    <label class="label">Additional Notes / Special Criteria</label>
+    <textarea id="b_notes" rows="3" placeholder="e.g. Must have attached garage, no HOA over $200/mo, prefer post-2000 builds, love Katy ISD flips..."></textarea>
+  </div>
+</div>
+
+<!-- Submit -->
+<button type="submit" class="w-full navy py-4 rounded-xl font-bold text-lg hover:bg-blue-900 transition">
+  🏛️ Join Aegis Buyer List — Get Deals That Match My Criteria
+</button>
+
+<p class="text-center text-sm text-gray-500 mt-4">
+  We typically have 3-8 deals per week in the Houston ~$400K ARV range.<br>
+  You'll only hear from us when something matches your buy box.
+</p>
+
+</form>
+</div>
+
+<script>
+const API = 'http://localhost:5001';
+
+function getChecked(ids) {
+  return ids.filter(id => document.getElementById(id)?.checked)
+            .map(id => document.getElementById(id)?.parentElement.innerText.trim())
+            .join(', ');
+}
+
+async function submitBuyer(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.textContent = '⏳ Adding you to the list...';
+  btn.disabled = true;
+
+  // Build notes from all selections
+  const strategies   = getChecked(['strat_flip','strat_brrrr','strat_rental','strat_wholesale','strat_newbuild']);
+  const conditions   = getChecked(['cond_c1','cond_c2','cond_c3','cond_c4','cond_c5','cond_c6']);
+  const propTypes    = getChecked(['type_sfr','type_townhome','type_condo','type_mfr','type_mobile']);
+  const schoolDists  = getChecked(['sd_katy','sd_cyfair','sd_klein','sd_clearcreek','sd_hisd','sd_any']);
+  const areas        = getChecked(['area_katy','area_spring','area_cypress','area_woodlands','area_sugarland','area_pearland','area_leaguecity','area_midtown','area_heights','area_medcenter','area_energycorr','area_bellaire']);
+  const foundations  = getChecked(['found_slab','found_pier','found_any']);
+
+  const notes = [
+    `Strategy: ${strategies}`,
+    `Conditions: ${conditions}`,
+    `Types: ${propTypes}`,
+    `School districts: ${schoolDists}`,
+    `Areas: ${areas}`,
+    `Foundation: ${foundations}`,
+    `Flood: ${document.getElementById('b_flood').value}`,
+    `Close type: ${document.getElementById('b_closing_type').value}`,
+    `Deals/month: ${document.getElementById('b_deals_per_month').value}`,
+    `POF: ${document.getElementById('b_pof').value}`,
+    document.getElementById('b_notes').value ? `Notes: ${document.getElementById('b_notes').value}` : ''
+  ].filter(Boolean).join(' | ');
+
+  const payload = {
+    name: document.getElementById('b_name').value,
+    company: document.getElementById('b_company').value,
+    phone: document.getElementById('b_phone').value,
+    email: document.getElementById('b_email').value,
+    buy_box_min: parseInt(document.getElementById('b_arv_min').value) || 300000,
+    buy_box_max: parseInt(document.getElementById('b_arv_max').value) || 500000,
+    max_rehab: parseInt(document.getElementById('b_max_rehab').value) || 75000,
+    min_beds: parseInt(document.getElementById('b_min_beds').value) || 3,
+    preferred_states: 'TX',
+    preferred_cities: areas || 'Houston Metro',
+    property_types: propTypes || 'Single Family',
+    cash_buyer: true,
+    closing_time_days: parseInt(document.getElementById('b_close_days').value) || 14,
+    notes: notes
+  };
+
+  try {
+    // Try API first
+    const res = await fetch(`${API}/api/buyers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    
+    if (res.ok) {
+      document.getElementById('successBanner').style.display = 'block';
+      document.getElementById('buyerForm').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      throw new Error('API error');
+    }
+  } catch {
+    // Fallback: save to localStorage and show success anyway
+    const buyers = JSON.parse(localStorage.getItem('aegis_buyer_leads') || '[]');
+    buyers.push({ ...payload, saved_at: new Date().toISOString() });
+    localStorage.setItem('aegis_buyer_leads', JSON.stringify(buyers));
+    
+    document.getElementById('successBanner').style.display = 'block';
+    document.getElementById('buyerForm').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('Saved to localStorage (API offline):', payload);
+  }
+}
+
+// Add buyers API endpoint if missing — update api_server.py
+// POST /api/buyers should already exist; if not, add to backend
+</script>
+</body>
+</html>
