@@ -52,6 +52,20 @@ PROPSTREAM_MAP = {
     'listing status': '_listing_status',
 }
 
+# County foreclosure scrape columns (Bexar/Harris)
+FORECLOSURE_MAP = {
+    'address': 'address',
+    'city': 'city',
+    'zip': 'zip',
+    'county': '_county',
+    'auction_date': '_auction_date',
+    'source_url': '_source_url',
+    'type': '_type',
+    'doc_number': '_doc_number',
+    'school_dist': '_school_dist',
+    'hot_flag': '_hot_flag',
+}
+
 def clean_money(val):
     if not val:
         return 0
@@ -65,9 +79,20 @@ def clean_int(val):
     except:
         return None
 
-def derive_motivation(row):
-    """Build motivation string from PropStream flags"""
+def derive_motivation(row, source='PropStream'):
+    """Build motivation string from PropStream flags or foreclosure type"""
     flags = []
+    if source == 'foreclosure':
+        ftype = row.get('_type', '').upper()
+        if ftype == 'MORTGAGE':
+            flags.append('Pre-foreclosure')
+        elif ftype == 'TAX':
+            flags.append('Tax delinquent')
+        if row.get('_hot_flag', '').strip().upper() == 'YES':
+            flags.append('Hot lead')
+        return ', '.join(flags) if flags else 'Foreclosure'
+
+    # PropStream path
     if row.get('_tax_delinquent', '').strip().lower() in ('yes', 'true', '1', 'y'):
         flags.append('Tax delinquent')
     if row.get('_preforeclosure', '').strip().lower() in ('yes', 'true', '1', 'y'):
@@ -95,19 +120,25 @@ def import_csv(filepath, source='PropStream', dry_run=False):
 
     with open(filepath, newline='', encoding='utf-8-sig') as f:
         reader = csv.DictReader(f)
-        
+
         # Normalize header names
         headers = {k.lower().strip(): k for k in reader.fieldnames or []}
         print(f"\n📂 File: {filepath}")
-        print(f"   Columns detected: {len(headers)}")
+        print(f"   Columns detected: {list(headers.keys())}")
         print(f"   Source: {source}")
         print(f"   Mode: {'DRY RUN' if dry_run else 'LIVE IMPORT'}\n")
+
+        # Detect format: if we see 'county' + 'auction_date' columns, treat as foreclosure scrape
+        is_foreclosure_format = 'county' in headers and 'auction_date' in headers
+        if is_foreclosure_format:
+            source = 'foreclosure'
+            print(f"   Detected: county foreclosure scrape format\n")
 
         for i, raw_row in enumerate(reader, 1):
             # Map columns
             row = {}
             for col_lower, original in headers.items():
-                mapped = PROPSTREAM_MAP.get(col_lower)
+                mapped = PROPSTREAM_MAP.get(col_lower) or FORECLOSURE_MAP.get(col_lower)
                 if mapped:
                     row[mapped] = raw_row.get(original, '').strip()
 
@@ -126,8 +157,8 @@ def import_csv(filepath, source='PropStream', dry_run=False):
             # Determine ARV
             arv_raw = row.get('arv', '')
             arv = clean_money(arv_raw)
-            
-            # Filter: only import ~$400K ARV range (300K-500K)
+
+            # Filter: only import ~$400K ARV range (300K-500K) when we have ARV data
             if arv and (arv < 250000 or arv > 600000):
                 skipped += 1
                 continue
@@ -135,13 +166,25 @@ def import_csv(filepath, source='PropStream', dry_run=False):
             # MAO calculation (70% rule)
             mao = int(arv * 0.70) if arv else 0
 
+            # Build notes for foreclosure format
+            notes = row.get('notes', '')
+            if is_foreclosure_format:
+                parts = []
+                if row.get('_county'): parts.append(f"County: {row['_county']}")
+                if row.get('_auction_date'): parts.append(f"Auction: {row['_auction_date']}")
+                if row.get('_doc_number'): parts.append(f"Doc #: {row['_doc_number']}")
+                if row.get('_school_dist'): parts.append(f"School: {row['_school_dist']}")
+                if row.get('_source_url'): parts.append(f"URL: {row['_source_url']}")
+                if parts:
+                    notes = ' | '.join(parts)
+
             # Assign condition based on listing status
             listing = row.get('_listing_status', '').lower()
             condition = 'C3'  # default
             if 'vacant' in row.get('_vacant', '').lower() or 'vacant' in listing:
                 condition = 'C4'
 
-            motivation = derive_motivation(row)
+            motivation = derive_motivation(row, source)
 
             if dry_run:
                 print(f"  [{i}] WOULD IMPORT: {address} | ARV: ${arv:,} | MAO: ${mao:,} | {motivation}")
@@ -150,7 +193,7 @@ def import_csv(filepath, source='PropStream', dry_run=False):
 
             try:
                 cursor.execute("""
-                    INSERT INTO properties 
+                    INSERT INTO properties
                     (address, city, state, zip, beds, baths, sqft, condition, year_built,
                      arv, mao, status, source, seller_name, seller_phone, motivation, notes)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -170,10 +213,10 @@ def import_csv(filepath, source='PropStream', dry_run=False):
                     row.get('seller_name', ''),
                     row.get('seller_phone', ''),
                     motivation,
-                    row.get('notes', '')
+                    notes
                 ))
                 imported += 1
-                
+
                 if imported % 10 == 0:
                     print(f"  ✓ {imported} records imported...")
 
