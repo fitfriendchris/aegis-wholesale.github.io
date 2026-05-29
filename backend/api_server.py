@@ -50,7 +50,10 @@ def get_properties():
         params.append(f"%{request.args.get('city')}%")
     if request.args.get('active'):
         query += " AND status IN ('lead', 'analyzing', 'under_contract')"
-    
+    if request.args.get('motivation'):
+        query += " AND motivation LIKE ?"
+        params.append(f"%{request.args.get('motivation')}%")
+
     query += " ORDER BY date_updated DESC"
     
     cursor.execute(query, params)

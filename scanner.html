@@ -110,40 +110,100 @@ absentee: [
 
 let scannedLeads = []; // holds current scan results
 
-function runScan(type) {
-  const leads = SOURCES[type] || [];
-  scannedLeads = leads;
-  const container = document.getElementById('leadsContainer');
+const SCAN_MAP = {
+  preforeclosure: 'Pre-foreclosure',
+  taxdelinquent: 'Tax delinquent',
+  absentee: 'Absentee'
+};
 
+function motivLevel(motivation) {
+  const m = (motivation || '').toLowerCase();
+  if (m.includes('pre-foreclosure') || m.includes('tax delinquent') || m.includes('hot')) return 'high';
+  if (m.includes('absentee') || m.includes('vacant') || m.includes('inherited')) return 'med';
+  return 'low';
+}
+
+async function runScan(type) {
+  const container = document.getElementById('leadsContainer');
+  container.innerHTML = '<p class="text-blue-600 text-center py-8">🔍 Scanning database for ' + type + ' leads...</p>';
+
+  const keyword = SCAN_MAP[type];
+  let leads = [];
+
+  // 1. Try real API first
+  try {
+    const resp = await fetch(`${API}/api/properties?motivation=${encodeURIComponent(keyword)}&active=1`);
+    if (resp.ok) {
+      const props = await resp.json();
+      if (props && props.length > 0) {
+        leads = props.map(p => {
+          const asking = p.asking_price || Math.round((p.arv || 0) * 0.60);
+          const repairs = p.repair_estimate || Math.round((p.arv || 0) * 0.15);
+          const mao = p.mao || Math.round((p.arv || 0) * 0.70 - repairs);
+          const spread = (p.arv || 0) - asking;
+          return {
+            address: p.address,
+            city: p.city,
+            zip: p.zip,
+            beds: p.beds,
+            baths: p.baths,
+            sqft: p.sqft,
+            condition: p.condition,
+            arv: p.arv || 0,
+            asking: asking,
+            mao: mao,
+            spread: spread,
+            motivLevel: motivLevel(p.motivation),
+            motivation: p.motivation || keyword,
+            note: p.notes || `${p.motivation || keyword} — ${p.source || 'Database'}`,
+            db_id: p.id  // already in DB, skip re-save
+          };
+        });
+      }
+    }
+  } catch (e) {
+    console.warn('API scan failed, falling back to samples:', e);
+  }
+
+  // 2. Fallback to hardcoded samples if nothing from API
+  if (leads.length === 0) {
+    leads = (SOURCES[type] || []).map(l => ({ ...l, db_id: null }));
+  }
+
+  scannedLeads = leads;
+  renderScanResults(leads);
+  document.getElementById('lastScan').textContent = new Date().toLocaleString();
+  document.getElementById('todayLeads').textContent = leads.length + (leads.some(l => l.db_id) ? ' (from DB)' : ' (samples)');
+}
+
+function renderScanResults(leads) {
+  const container = document.getElementById('leadsContainer');
   let html = '<div class="overflow-x-auto"><table class="w-full text-left">';
   html += '<thead class="bg-gray-50"><tr><th class="p-3">Property</th><th class="p-3">ARV</th><th class="p-3">Asking</th><th class="p-3">Spread</th><th class="p-3">Motivation</th><th class="p-3">Note</th><th class="p-3">Action</th></tr></thead><tbody>';
 
   leads.forEach((lead, idx) => {
-    const mao = Math.round(lead.arv * 0.70 - 25000); // estimate repairs
-    const spread = lead.arv - lead.asking;
+    const spread = lead.spread !== undefined ? lead.spread : lead.arv - lead.asking;
     const spreadColor = spread > 100000 ? 'color:green;font-weight:bold' : spread > 50000 ? 'color:orange' : 'color:#999';
     const motivationClass = lead.motivLevel === 'high' ? 'motivation-high' : lead.motivLevel === 'med' ? 'motivation-med' : 'motivation-low';
+    const isDb = !!lead.db_id;
     html += `<tr class="border-b">
-      <td class="p-3 font-medium" style="min-width:180px">${lead.address}</td>
-      <td class="p-3">$${(lead.arv/1000).toFixed(0)}K</td>
-      <td class="p-3">$${(lead.asking/1000).toFixed(0)}K</td>
-      <td class="p-3" style="${spreadColor}">+$${(spread/1000).toFixed(0)}K</td>
-      <td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${motivationClass}">${lead.motivLevel.toUpperCase()}</span></td>
+      <td class="p-3 font-medium" style="min-width:180px">${lead.address}${isDb ? ' <span class="text-xs text-gray-400">(DB)</span>' : ''}</td>
+      <td class="p-3">$${((lead.arv||0)/1000).toFixed(0)}K</td>
+      <td class="p-3">$${((lead.asking||0)/1000).toFixed(0)}K</td>
+      <td class="p-3" style="${spreadColor}">+$${((spread||0)/1000).toFixed(0)}K</td>
+      <td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${motivationClass}">${(lead.motivLevel||'low').toUpperCase()}</span></td>
       <td class="p-3 text-sm text-gray-600" style="max-width:220px">${lead.note}</td>
       <td class="p-3">
-        <button onclick="saveLeadToAPI(${idx})" id="save-btn-${idx}"
-          class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">Save →</button>
+        ${isDb
+          ? `<button disabled class="bg-gray-400 text-white px-3 py-1 rounded text-sm cursor-not-allowed">In DB</button>`
+          : `<button onclick="saveLeadToAPI(${idx})" id="save-btn-${idx}" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">Save →</button>`
+        }
       </td>
     </tr>`;
   });
 
   html += '</tbody></table></div>';
   container.innerHTML = html;
-  document.getElementById('lastScan').textContent = new Date().toLocaleString();
-  document.getElementById('todayLeads').textContent = leads.length;
-
-  // Load today's real leads from DB too
-  loadRealLeads();
 }
 
 async function saveLeadToAPI(idx) {
